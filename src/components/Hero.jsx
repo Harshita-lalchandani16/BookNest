@@ -5,7 +5,7 @@ function Hero() {
 
         <div>
           <p className="text-[#a06b3b] font-semibold mb-3">
-            WELCOME TO THE BOOK NOOK
+            WELCOME TO BookNest
           </p>
 
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">

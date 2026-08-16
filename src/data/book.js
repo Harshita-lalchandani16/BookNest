@@ -1,75 +1,204 @@
 const books = [
   {
     id: 1,
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    price: 399,
-    category: "Classic Literature",
-    image:
-      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=500&q=80",
-    description:
-      "A timeless classic about love, family, society and the misunderstandings between Elizabeth Bennet and Mr. Darcy."
-  },
-
-  {
-    id: 2,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    price: 349,
-    category: "Classic Literature",
-    image:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80",
-    description:
-      "A classic story about dreams, love, wealth and the mysterious Jay Gatsby."
-  },
-
-  {
-    id: 3,
-    title: "Little Women",
-    author: "Louisa May Alcott",
-    price: 449,
-    category: "Classic Literature",
-    image:
-      "https://images.unsplash.com/photo-1511108690759-009324a90311?auto=format&fit=crop&w=500&q=80",
-    description:
-      "The story of four sisters growing up together while discovering love, ambition and independence."
-  },
-
-  {
-    id: 4,
     title: "The Alchemist",
     author: "Paulo Coelho",
     price: 299,
+    oldPrice: 399,
     category: "Fiction",
-    image:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80",
-    description:
-      "An inspiring story about following your dreams and discovering your own path in life."
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9780061122415-L.jpg",
   },
-
+  {
+    id: 2,
+    title: "Atomic Habits",
+    author: "James Clear",
+    price: 499,
+    oldPrice: 599,
+    category: "Self Help",
+    rating: 4.9,
+    image: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
+  },
+  {
+    id: 3,
+    title: "Rich Dad Poor Dad",
+    author: "Robert Kiyosaki",
+    price: 399,
+    oldPrice: 499,
+    category: "Finance",
+    rating: 4.7,
+    image: "https://covers.openlibrary.org/b/isbn/9781612680194-L.jpg",
+  },
+  {
+    id: 4,
+    title: "Ikigai",
+    author: "Hector Garcia",
+    price: 350,
+    oldPrice: 450,
+    category: "Self Help",
+    rating: 4.6,
+    image: "https://covers.openlibrary.org/b/isbn/9780143130727-L.jpg",
+  },
   {
     id: 5,
-    title: "Harry Potter",
+    title: "Harry Potter and the Philosopher's Stone",
     author: "J.K. Rowling",
-    price: 499,
+    price: 450,
+    oldPrice: 550,
     category: "Fantasy",
-    image:
-      "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?auto=format&fit=crop&w=500&q=80",
-    description:
-      "A magical adventure following Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry."
+    rating: 4.9,
+    image: "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg",
   },
-
   {
     id: 6,
+    title: "1984",
+    author: "George Orwell",
+    price: 299,
+    oldPrice: 399,
+    category: "Classic",
+    rating: 4.7,
+    image: "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg",
+  },
+  {
+    id: 7,
     title: "The Hobbit",
     author: "J.R.R. Tolkien",
-    price: 429,
+    price: 450,
+    oldPrice: 550,
     category: "Fantasy",
-    image:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80",
-    description:
-      "Bilbo Baggins begins an unexpected adventure filled with dwarves, dragons and magical lands."
-  }
-]
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg",
+  },
+  {
+    id: 8,
+    title: "Deep Work",
+    author: "Cal Newport",
+    price: 399,
+    oldPrice: 499,
+    category: "Productivity",
+    rating: 4.6,
+    image: "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg",
+  },
+  {
+    id: 9,
+    title: "The Psychology of Money",
+    author: "Morgan Housel",
+    price: 399,
+    oldPrice: 499,
+    category: "Finance",
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
+  },
+  {
+    id: 10,
+    title: "The Subtle Art of Not Giving a F*ck",
+    author: "Mark Manson",
+    price: 350,
+    oldPrice: 450,
+    category: "Self Help",
+    rating: 4.5,
+    image: "https://covers.openlibrary.org/b/isbn/9780062457738-L.jpg",
+  },
+  {
+    id: 11,
+    title: "Pride and Prejudice",
+    author: "Jane Austen",
+    price: 280,
+    oldPrice: 350,
+    category: "Romance",
+    rating: 4.7,
+    image: "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg",
+  },
+  {
+    id: 12,
+    title: "The Kite Runner",
+    author: "Khaled Hosseini",
+    price: 399,
+    oldPrice: 499,
+    category: "Fiction",
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9781594631931-L.jpg",
+  },
+  {
+    id: 13,
+    title: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    price: 299,
+    oldPrice: 399,
+    category: "Classic",
+    rating: 4.6,
+    image: "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg",
+  },
+  {
+    id: 14,
+    title: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    price: 349,
+    oldPrice: 449,
+    category: "Classic",
+    rating: 4.9,
+    image: "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg",
+  },
+  {
+    id: 15,
+    title: "Think and Grow Rich",
+    author: "Napoleon Hill",
+    price: 299,
+    oldPrice: 399,
+    category: "Finance",
+    rating: 4.6,
+    image: "https://covers.openlibrary.org/b/isbn/9781585424337-L.jpg",
+  },
+  {
+    id: 16,
+    title: "The 7 Habits of Highly Effective People",
+    author: "Stephen R. Covey",
+    price: 499,
+    oldPrice: 599,
+    category: "Self Help",
+    rating: 4.7,
+    image: "https://covers.openlibrary.org/b/isbn/9781982137274-L.jpg",
+  },
+  {
+    id: 17,
+    title: "A Man Called Ove",
+    author: "Fredrik Backman",
+    price: 399,
+    oldPrice: 499,
+    category: "Fiction",
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9781476738017-L.jpg",
+  },
+  {
+    id: 18,
+    title: "The Book Thief",
+    author: "Markus Zusak",
+    price: 399,
+    oldPrice: 499,
+    category: "Fiction",
+    rating: 4.8,
+    image: "https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg",
+  },
+  {
+    id: 19,
+    title: "Dune",
+    author: "Frank Herbert",
+    price: 499,
+    oldPrice: 599,
+    category: "Fantasy",
+    rating: 4.7,
+    image: "https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg",
+  },
+  {
+    id: 20,
+    title: "The Fault in Our Stars",
+    author: "John Green",
+    price: 299,
+    oldPrice: 399,
+    category: "Romance",
+    rating: 4.5,
+    image: "https://covers.openlibrary.org/b/isbn/9780062208112-L.jpg",
+  },
+];
 
-export default books
+export default books;

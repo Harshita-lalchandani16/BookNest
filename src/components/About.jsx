@@ -4,11 +4,11 @@ function About() {
       <div className="max-w-5xl mx-auto text-center">
 
         <h2 className="text-4xl font-bold mb-6">
-          About The Book Nook
+          About BookNest
         </h2>
 
         <p className="text-lg leading-8 text-gray-700">
-          The Book Nook is a cozy online bookstore created for readers
+         BookNest is a cozy online bookstore created for readers
           who love discovering beautiful stories. From timeless classics
           to modern favorites, we bring a carefully selected collection
           of books together in one place.
