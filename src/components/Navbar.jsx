@@ -50,20 +50,25 @@ function Navbar() {
           </button>
 
           {/* Cart */}
-          <button className="text-2xl hover:text-[#E8C878] transition">
+          <button className="text-2xl text-[#E8C878] hover:text-[#F3D38A] transition">
             🛒
           </button>
 
         </div>
 
         {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center gap-4">
+
+        <button className="text-2xl text-[#E8C878]">
+         🛒
+         </button>
         <button
           onClick={() => setMenu(!menu)}
           className="md:hidden text-2xl"
         >
           ☰
         </button>
-
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -121,10 +126,6 @@ function Navbar() {
 
               <button className="bg-[#E8C878] text-[#3B2415] px-4 py-2 rounded-lg hover:bg-[#D6B45F] transition">
                 Sign Up
-              </button>
-
-              <button className="text-2xl hover:text-[#E8C878] transition">
-                🛒
               </button>
 
             </div>
