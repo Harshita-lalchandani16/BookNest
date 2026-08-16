@@ -31,11 +31,14 @@ function Books() {
               className="book-card bg-white rounded-2xl overflow-hidden shadow-md"
             >
 
+              <div className="relative bg-[#EDE0CA] p-4 h-[270px] overflow-hidden">
+                
               <img
-                src={book.image}
-                alt={book.title}
-                className="w-full h-72 object-cover"
+              src={book.image}
+              alt={book.title}
+              className="w-full h-full object-contain"
               />
+            </div>
 
               <div className="p-5">
 

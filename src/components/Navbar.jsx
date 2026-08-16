@@ -1,31 +1,139 @@
+import { useState } from "react"
+
 function Navbar() {
+  const [menu, setMenu] = useState(false)
+
   return (
-    <nav className="bg-[#6b4226] text-[#f7f1e3] px-6 py-4 sticky top-0 z-50">
+    <nav className="bg-[#6B4226] text-white px-5 py-4 sticky top-0 z-50">
+
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-        <a href="#home" className="text-2xl font-bold">
-            BookNest
+        {/* Logo */}
+        <a
+          href="#home"
+          className="text-2xl font-bold"
+        >
+          📚 BookNest
         </a>
 
-        <div className="hidden md:flex gap-8">
-          <a href="#home" className="hover:text-[#d6b47a]">Home</a>
-          <a href="#categories" className="hover:text-[#d6b47a]">Categories</a>
-          <a href="#books" className="hover:text-[#d6b47a]">Books</a>
-          <a href="#about" className="hover:text-[#d6b47a]">About</a>
-          <a href="#contact" className="hover:text-[#d6b47a]">Contact</a>
-        </div>
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-7">
 
-        <div className="flex gap-3">
-          <button className="border border-[#f7f1e3] px-4 py-2 rounded-lg">
+          <a href="#home" className="hover:text-[#E8C878] transition">
+            Home
+          </a>
+
+          <a href="#categories" className="hover:text-[#E8C878] transition">
+            Categories
+          </a>
+
+          <a href="#books" className="hover:text-[#E8C878] transition">
+            Books
+          </a>
+
+          <a href="#about" className="hover:text-[#E8C878] transition">
+            About
+          </a>
+
+          <a href="#contact" className="hover:text-[#E8C878] transition">
+            Contact
+          </a>
+
+          {/* Login */}
+          <button className="border border-white px-4 py-2 rounded-lg hover:bg-[#E8C878] hover:text-[#3B2415] transition">
             Login
           </button>
 
-          <button className="bg-[#d6b47a] text-[#3d2b1f] px-4 py-2 rounded-lg">
-            Cart
+          {/* Sign Up */}
+          <button className="bg-[#E8C878] text-[#3B2415] px-4 py-2 rounded-lg hover:bg-[#D6B45F] transition">
+            Sign Up
           </button>
+
+          {/* Cart */}
+          <button className="text-2xl hover:text-[#E8C878] transition">
+            🛒
+          </button>
+
         </div>
 
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMenu(!menu)}
+          className="md:hidden text-2xl"
+        >
+          ☰
+        </button>
+
       </div>
+
+      {/* Mobile Menu */}
+      {menu && (
+        <div className="md:hidden mt-4 border-t border-[#8A5B3B] pt-4">
+
+          <div className="flex flex-col gap-4">
+
+            <a
+              href="#home"
+              onClick={() => setMenu(false)}
+              className="hover:text-[#E8C878]"
+            >
+              Home
+            </a>
+
+            <a
+              href="#categories"
+              onClick={() => setMenu(false)}
+              className="hover:text-[#E8C878]"
+            >
+              Categories
+            </a>
+
+            <a
+              href="#books"
+              onClick={() => setMenu(false)}
+              className="hover:text-[#E8C878]"
+            >
+              Books
+            </a>
+
+            <a
+              href="#about"
+              onClick={() => setMenu(false)}
+              className="hover:text-[#E8C878]"
+            >
+              About
+            </a>
+
+            <a
+              href="#contact"
+              onClick={() => setMenu(false)}
+              className="hover:text-[#E8C878]"
+            >
+              Contact
+            </a>
+
+            {/* Mobile Buttons */}
+            <div className="flex items-center gap-3 pt-2">
+
+              <button className="border border-white px-4 py-2 rounded-lg hover:bg-[#E8C878] hover:text-[#3B2415] transition">
+                Login
+              </button>
+
+              <button className="bg-[#E8C878] text-[#3B2415] px-4 py-2 rounded-lg hover:bg-[#D6B45F] transition">
+                Sign Up
+              </button>
+
+              <button className="text-2xl hover:text-[#E8C878] transition">
+                🛒
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
     </nav>
   )
 }

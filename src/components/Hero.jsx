@@ -27,9 +27,15 @@ function Hero() {
 
         <div>
           <img
-            src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80"
-            alt="Books"
-            className="w-full h-96 object-cover rounded-3xl shadow-xl"
+            src="https://media.traveler.es/photos/65030135fa748d8eb93dcd7c/4%3A3/w_2664%2Ch_1998%2Cc_limit/_F.-Jousseaume-3-%40Yuka-Toyoshima.jpg"
+            alt="Vintage Bookstore"
+            className="
+            w-full
+            h-[330px]
+            sm:h-[390px]
+            md:h-[430px]
+            object-cover
+            "
           />
         </div>
 
