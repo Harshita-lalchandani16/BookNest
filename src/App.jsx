@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import Categories from "./components/Categories"
-import Books from "./components/Books"
+import Book from "./components/Book"
 import About from "./components/About"
 import Contact from "./components/Contact"
 
@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <Hero />
       <Categories />
-      <Books />
+      <Book />
       <About />
       <Contact />
 

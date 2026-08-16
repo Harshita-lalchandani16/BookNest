@@ -1,4 +1,4 @@
-import books from "../data/books"
+import books from "../data/book"
 
 function Books() {
   return (
