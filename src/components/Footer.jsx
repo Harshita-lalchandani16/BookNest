@@ -28,15 +28,14 @@ function Footer() {
           </div>
         </div>
 
-        <div>
-          <h3 className="font-semibold mb-3">
-            Contact Us
-          </h3>
+         <div>
+          <h3 className="font-semibold mb-3">Categories</h3>
 
-          <div className="text-[#f3dfc1] space-y-2">
-            <p>📧 support@booknest.com</p>
-            <p>📞 +91 98765 43210</p>
-            <p>📍 Mumbai, India</p>
+          <div className="flex flex-col gap-2 text-[#F3DFC1]">
+            <p>Fiction</p>
+            <p>Fantasy</p>
+            <p>Self Help</p>
+            <p>Classic Literature</p>
           </div>
         </div>
 
