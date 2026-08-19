@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import Categories from "./components/Categories"
@@ -6,18 +8,29 @@ import About from "./components/About"
 import Contact from "./components/Contact"
 import Footer from "./components/Footer"
 
-function App() {
+function Home() {
   return (
     <>
-      <Navbar />
       <Hero />
       <Categories />
       <Book />
       <About />
       <Contact />
-      <Footer/>
-      
     </>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+
+      <Footer />
+    </BrowserRouter>
   )
 }
 
