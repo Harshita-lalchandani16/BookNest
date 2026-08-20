@@ -61,7 +61,7 @@ function BookDetails() {
         "cart",
         JSON.stringify(updatedCart)
       )
-
+      window.dispatchEvent(new Event("cartUpdated"))
       // Verify immediately
       const verifyCart = localStorage.getItem("cart")
 

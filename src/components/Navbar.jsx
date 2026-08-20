@@ -1,18 +1,75 @@
 import { useState, useEffect } from "react"
-import { useLocation, useNavigate, Link } from "react-router-dom"
+import {
+  useLocation,
+  useNavigate,
+  Link,
+} from "react-router-dom"
 
 function Navbar() {
   const [menu, setMenu] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
+  const [cartCount, setCartCount] = useState(0)
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Detect which section is currently visible
+  // =========================
+  // CART COUNT
+  // =========================
+
+  const updateCartCount = () => {
+    const savedCart =
+      JSON.parse(localStorage.getItem("cart")) || []
+
+    setCartCount(savedCart.length)
+  }
+
+  useEffect(() => {
+    updateCartCount()
+
+    window.addEventListener(
+      "cartUpdated",
+      updateCartCount
+    )
+
+    window.addEventListener(
+      "storage",
+      updateCartCount
+    )
+
+    return () => {
+      window.removeEventListener(
+        "cartUpdated",
+        updateCartCount
+      )
+
+      window.removeEventListener(
+        "storage",
+        updateCartCount
+      )
+    }
+  }, [])
+
+  // =========================
+  // ACTIVE SECTION
+  // =========================
+
   useEffect(() => {
     // Category pages
     if (location.pathname.startsWith("/category/")) {
       setActiveSection("categories")
+      return
+    }
+
+    // Book details page
+    if (location.pathname.startsWith("/book/")) {
+      setActiveSection("books")
+      return
+    }
+
+    // Cart page
+    if (location.pathname === "/cart") {
+      setActiveSection("")
       return
     }
 
@@ -39,11 +96,14 @@ function Navbar() {
           .filter((entry) => entry.isIntersecting)
           .sort(
             (a, b) =>
-              a.boundingClientRect.top - b.boundingClientRect.top
+              a.boundingClientRect.top -
+              b.boundingClientRect.top
           )
 
         if (visibleSections.length > 0) {
-          setActiveSection(visibleSections[0].target.id)
+          setActiveSection(
+            visibleSections[0].target.id
+          )
         }
       },
       {
@@ -62,7 +122,10 @@ function Navbar() {
     }
   }, [location.pathname])
 
-  // Go to Home page top
+  // =========================
+  // GO HOME
+  // =========================
+
   const goHome = () => {
     setMenu(false)
 
@@ -76,13 +139,16 @@ function Navbar() {
     }
   }
 
-  // Go to a section
+  // =========================
+  // GO TO SECTION
+  // =========================
+
   const goToSection = (section) => {
     setMenu(false)
 
-    // Already on Home page
     if (location.pathname === "/") {
-      const element = document.getElementById(section)
+      const element =
+        document.getElementById(section)
 
       if (element) {
         element.scrollIntoView({
@@ -94,12 +160,11 @@ function Navbar() {
       return
     }
 
-    // Coming from Category page
     navigate("/")
 
-    // Wait for Home page to render
     setTimeout(() => {
-      const element = document.getElementById(section)
+      const element =
+        document.getElementById(section)
 
       if (element) {
         element.scrollIntoView({
@@ -110,7 +175,10 @@ function Navbar() {
     }, 150)
   }
 
-  // Active class
+  // =========================
+  // ACTIVE NAV CLASS
+  // =========================
+
   const navClass = (section) => {
     return `transition ${
       activeSection === section
@@ -119,12 +187,56 @@ function Navbar() {
     }`
   }
 
+  // =========================
+  // CART BUTTON
+  // =========================
+
+  const CartButton = ({ mobile = false }) => {
+    return (
+      <Link
+        to="/cart"
+        onClick={() => setMenu(false)}
+        className={`relative ${
+          mobile
+            ? "text-2xl text-[#E8C878]"
+            : "text-2xl text-[#E8C878] hover:text-[#F3D38A] transition"
+        }`}
+      >
+        🛒
+
+        {cartCount > 0 && (
+          <span
+            className="
+              absolute
+              -top-2
+              -right-3
+              min-w-[20px]
+              h-5
+              px-1
+              rounded-full
+              bg-[#E8C878]
+              text-[#3B2415]
+              text-xs
+              font-bold
+              flex
+              items-center
+              justify-center
+            "
+          >
+            {cartCount}
+          </span>
+        )}
+      </Link>
+    )
+  }
+
   return (
     <nav className="bg-[#6B4226] text-white px-5 py-4 sticky top-0 z-50">
 
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-        {/* LOGO */}
+        {/* ================= LOGO ================= */}
+
         <button
           onClick={goHome}
           className="text-2xl font-bold hover:text-[#E8C878] transition"
@@ -132,10 +244,13 @@ function Navbar() {
           📚 BookNest
         </button>
 
-        {/* DESKTOP NAVBAR */}
+
+        {/* ================= DESKTOP ================= */}
+
         <div className="hidden md:flex items-center gap-7">
 
           {/* HOME */}
+
           <button
             onClick={goHome}
             className={navClass("home")}
@@ -143,39 +258,57 @@ function Navbar() {
             Home
           </button>
 
+
           {/* CATEGORIES */}
+
           <button
-            onClick={() => goToSection("categories")}
+            onClick={() =>
+              goToSection("categories")
+            }
             className={navClass("categories")}
           >
             Categories
           </button>
 
+
           {/* BOOKS */}
+
           <button
-            onClick={() => goToSection("books")}
+            onClick={() =>
+              goToSection("books")
+            }
             className={navClass("books")}
           >
             Books
           </button>
 
+
           {/* ABOUT */}
+
           <button
-            onClick={() => goToSection("about")}
+            onClick={() =>
+              goToSection("about")
+            }
             className={navClass("about")}
           >
             About
           </button>
 
+
           {/* CONTACT */}
+
           <button
-            onClick={() => goToSection("contact")}
+            onClick={() =>
+              goToSection("contact")
+            }
             className={navClass("contact")}
           >
             Contact
           </button>
 
+
           {/* LOGIN */}
+
           <button
             className="
               border border-white
@@ -189,7 +322,9 @@ function Navbar() {
             Login
           </button>
 
+
           {/* SIGN UP */}
+
           <button
             className="
               bg-[#E8C878]
@@ -203,31 +338,19 @@ function Navbar() {
             Sign Up
           </button>
 
+
           {/* CART */}
-         <Link
-          to="/cart"
-          className="
-          text-2xl
-          text-[#E8C878]
-          hover:text-[#F3D38A]
-          transition
-          "
-        >
-         🛒
-        </Link>
+
+          <CartButton />
 
         </div>
 
-        {/* MOBILE */}
+
+        {/* ================= MOBILE ================= */}
+
         <div className="md:hidden flex items-center gap-4">
 
-         <Link
-         to="/cart"
-         onClick={() => setMenu(false)}
-        className="text-2xl text-[#E8C878]"
-        >
-        🛒
-        </Link>
+          <CartButton mobile />
 
           <button
             onClick={() => setMenu(!menu)}
@@ -240,13 +363,16 @@ function Navbar() {
 
       </div>
 
-      {/* MOBILE MENU */}
+
+      {/* ================= MOBILE MENU ================= */}
+
       {menu && (
         <div className="md:hidden mt-4 border-t border-[#8A5B3B] pt-4">
 
           <div className="flex flex-col gap-4">
 
             {/* HOME */}
+
             <button
               onClick={goHome}
               className={`text-left ${navClass("home")}`}
@@ -254,39 +380,65 @@ function Navbar() {
               Home
             </button>
 
+
             {/* CATEGORIES */}
+
             <button
-              onClick={() => goToSection("categories")}
-              className={`text-left ${navClass("categories")}`}
+              onClick={() =>
+                goToSection("categories")
+              }
+              className={`text-left ${navClass(
+                "categories"
+              )}`}
             >
               Categories
             </button>
 
+
             {/* BOOKS */}
+
             <button
-              onClick={() => goToSection("books")}
-              className={`text-left ${navClass("books")}`}
+              onClick={() =>
+                goToSection("books")
+              }
+              className={`text-left ${navClass(
+                "books"
+              )}`}
             >
               Books
             </button>
 
+
             {/* ABOUT */}
+
             <button
-              onClick={() => goToSection("about")}
-              className={`text-left ${navClass("about")}`}
+              onClick={() =>
+                goToSection("about")
+              }
+              className={`text-left ${navClass(
+                "about"
+              )}`}
             >
               About
             </button>
 
+
             {/* CONTACT */}
+
             <button
-              onClick={() => goToSection("contact")}
-              className={`text-left ${navClass("contact")}`}
+              onClick={() =>
+                goToSection("contact")
+              }
+              className={`text-left ${navClass(
+                "contact"
+              )}`}
             >
               Contact
             </button>
 
+
             {/* LOGIN + SIGN UP */}
+
             <div className="flex items-center gap-3 pt-2">
 
               <button

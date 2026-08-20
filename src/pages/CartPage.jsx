@@ -26,6 +26,10 @@ function CartPage() {
     )
   }
 
+  window.dispatchEvent(
+  new Event("cartUpdated")
+)
+
   // Calculate total
   const totalPrice = cart.reduce(
     (total, book) => total + book.price,
