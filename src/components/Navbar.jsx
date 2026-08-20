@@ -8,36 +8,63 @@ function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Scroll to selected section after Home page loads
+  // Detect which section is currently visible
   useEffect(() => {
-    const section = sessionStorage.getItem("scrollToSection")
+    // Category pages
+    if (location.pathname.startsWith("/category/")) {
+      setActiveSection("categories")
+      return
+    }
 
-    if (location.pathname === "/" && section) {
-      sessionStorage.removeItem("scrollToSection")
+    // Only observe sections on Home page
+    if (location.pathname !== "/") {
+      return
+    }
 
-      // First go to top
-      window.scrollTo(0, 0)
+    const sections = [
+      "home",
+      "categories",
+      "books",
+      "about",
+      "contact",
+    ]
 
-      // Wait for Home page to render completely
-      setTimeout(() => {
-        const element = document.getElementById(section)
+    const sectionElements = sections
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
 
-        if (element) {
-          element.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top
+          )
+
+        if (visibleSections.length > 0) {
+          setActiveSection(visibleSections[0].target.id)
         }
-      }, 300)
+      },
+      {
+        root: null,
+        rootMargin: "-100px 0px -55% 0px",
+        threshold: 0,
+      }
+    )
+
+    sectionElements.forEach((section) => {
+      observer.observe(section)
+    })
+
+    return () => {
+      observer.disconnect()
     }
   }, [location.pathname])
 
-  // HOME
+  // Go to Home page top
   const goHome = () => {
     setMenu(false)
-    setActiveSection("home")
-
-    sessionStorage.removeItem("scrollToSection")
 
     if (location.pathname === "/") {
       window.scrollTo({
@@ -49,10 +76,9 @@ function Navbar() {
     }
   }
 
-  // SECTION NAVIGATION
+  // Go to a section
   const goToSection = (section) => {
     setMenu(false)
-    setActiveSection(section)
 
     // Already on Home page
     if (location.pathname === "/") {
@@ -68,11 +94,29 @@ function Navbar() {
       return
     }
 
-    // Coming from category page
-    sessionStorage.setItem("scrollToSection", section)
-
-    // Navigate to Home
+    // Coming from Category page
     navigate("/")
+
+    // Wait for Home page to render
+    setTimeout(() => {
+      const element = document.getElementById(section)
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+    }, 150)
+  }
+
+  // Active class
+  const navClass = (section) => {
+    return `transition ${
+      activeSection === section
+        ? "text-[#E8C878] font-semibold"
+        : "text-white hover:text-[#E8C878]"
+    }`
   }
 
   return (
@@ -94,11 +138,7 @@ function Navbar() {
           {/* HOME */}
           <button
             onClick={goHome}
-            className={`transition ${
-              activeSection === "home"
-                ? "text-[#E8C878] font-semibold"
-                : "text-white hover:text-[#E8C878]"
-            }`}
+            className={navClass("home")}
           >
             Home
           </button>
@@ -106,11 +146,7 @@ function Navbar() {
           {/* CATEGORIES */}
           <button
             onClick={() => goToSection("categories")}
-            className={`transition ${
-              activeSection === "categories"
-                ? "text-[#E8C878] font-semibold"
-                : "text-white hover:text-[#E8C878]"
-            }`}
+            className={navClass("categories")}
           >
             Categories
           </button>
@@ -118,11 +154,7 @@ function Navbar() {
           {/* BOOKS */}
           <button
             onClick={() => goToSection("books")}
-            className={`transition ${
-              activeSection === "books"
-                ? "text-[#E8C878] font-semibold"
-                : "text-white hover:text-[#E8C878]"
-            }`}
+            className={navClass("books")}
           >
             Books
           </button>
@@ -130,11 +162,7 @@ function Navbar() {
           {/* ABOUT */}
           <button
             onClick={() => goToSection("about")}
-            className={`transition ${
-              activeSection === "about"
-                ? "text-[#E8C878] font-semibold"
-                : "text-white hover:text-[#E8C878]"
-            }`}
+            className={navClass("about")}
           >
             About
           </button>
@@ -142,11 +170,7 @@ function Navbar() {
           {/* CONTACT */}
           <button
             onClick={() => goToSection("contact")}
-            className={`transition ${
-              activeSection === "contact"
-                ? "text-[#E8C878] font-semibold"
-                : "text-white hover:text-[#E8C878]"
-            }`}
+            className={navClass("contact")}
           >
             Contact
           </button>
@@ -220,11 +244,7 @@ function Navbar() {
             {/* HOME */}
             <button
               onClick={goHome}
-              className={`text-left transition ${
-                activeSection === "home"
-                  ? "text-[#E8C878] font-semibold"
-                  : "text-white hover:text-[#E8C878]"
-              }`}
+              className={`text-left ${navClass("home")}`}
             >
               Home
             </button>
@@ -232,11 +252,7 @@ function Navbar() {
             {/* CATEGORIES */}
             <button
               onClick={() => goToSection("categories")}
-              className={`text-left transition ${
-                activeSection === "categories"
-                  ? "text-[#E8C878] font-semibold"
-                  : "text-white hover:text-[#E8C878]"
-              }`}
+              className={`text-left ${navClass("categories")}`}
             >
               Categories
             </button>
@@ -244,11 +260,7 @@ function Navbar() {
             {/* BOOKS */}
             <button
               onClick={() => goToSection("books")}
-              className={`text-left transition ${
-                activeSection === "books"
-                  ? "text-[#E8C878] font-semibold"
-                  : "text-white hover:text-[#E8C878]"
-              }`}
+              className={`text-left ${navClass("books")}`}
             >
               Books
             </button>
@@ -256,11 +268,7 @@ function Navbar() {
             {/* ABOUT */}
             <button
               onClick={() => goToSection("about")}
-              className={`text-left transition ${
-                activeSection === "about"
-                  ? "text-[#E8C878] font-semibold"
-                  : "text-white hover:text-[#E8C878]"
-              }`}
+              className={`text-left ${navClass("about")}`}
             >
               About
             </button>
@@ -268,11 +276,7 @@ function Navbar() {
             {/* CONTACT */}
             <button
               onClick={() => goToSection("contact")}
-              className={`text-left transition ${
-                activeSection === "contact"
-                  ? "text-[#E8C878] font-semibold"
-                  : "text-white hover:text-[#E8C878]"
-              }`}
+              className={`text-left ${navClass("contact")}`}
             >
               Contact
             </button>
