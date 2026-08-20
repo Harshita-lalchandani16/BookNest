@@ -1,48 +1,162 @@
+import { useLocation, useNavigate } from "react-router-dom"
+
 function Footer() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const goToSection = (section) => {
+    // Already on Home page
+    if (location.pathname === "/") {
+      const element = document.getElementById(section)
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+
+      return
+    }
+
+    // From category page → Home page
+    navigate("/")
+
+    // Wait for Home page to render
+    setTimeout(() => {
+      const element = document.getElementById(section)
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+    }, 150)
+  }
+
+  const goHome = () => {
+    if (location.pathname === "/") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      })
+    } else {
+      navigate("/")
+    }
+  }
+
   return (
-    <footer className="bg-[#6b4226] text-white px-6 py-10">
+    <footer className="bg-[#6B4226] text-white px-6 py-12">
 
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
 
+        {/* BRAND */}
         <div>
-          <h2 className="text-2xl font-bold">
+          <button
+            onClick={goHome}
+            className="text-2xl font-bold hover:text-[#E8C878] transition"
+          >
             📚 BookNest
-          </h2>
+          </button>
 
-          <p className="text-[#f3dfc1] mt-3">
+          <p className="text-[#F3DFC1] mt-4 leading-7">
             Your one-stop destination for books, stories,
             knowledge and inspiration.
           </p>
+
+          <p className="text-[#E8C878] mt-4 font-semibold">
+            Read. Discover. Repeat. 📖
+          </p>
         </div>
 
+
+        {/* QUICK LINKS */}
         <div>
-          <h3 className="font-semibold mb-3">
+          <h3 className="text-lg font-semibold mb-4">
             Quick Links
           </h3>
 
-          <div className="flex flex-col gap-2 text-[#f3dfc1]">
-            <a href="#home" className="hover:text-white">Home</a>
-            <a href="#books" className="hover:text-white">Books</a>
-            <a href="#categories" className="hover:text-white">Categories</a>
-            <a href="#about" className="hover:text-white">About Us</a>
+          <div className="flex flex-col gap-3 text-[#F3DFC1]">
+
+            <button
+              onClick={goHome}
+              className="text-left hover:text-[#E8C878] transition"
+            >
+              Home
+            </button>
+
+            <button
+              onClick={() => goToSection("categories")}
+              className="text-left hover:text-[#E8C878] transition"
+            >
+              Categories
+            </button>
+
+            <button
+              onClick={() => goToSection("books")}
+              className="text-left hover:text-[#E8C878] transition"
+            >
+              Books
+            </button>
+
+            <button
+              onClick={() => goToSection("about")}
+              className="text-left hover:text-[#E8C878] transition"
+            >
+              About Us
+            </button>
+
+            <button
+              onClick={() => goToSection("contact")}
+              className="text-left hover:text-[#E8C878] transition"
+            >
+              Contact
+            </button>
+
           </div>
         </div>
 
-         <div>
-          <h3 className="font-semibold mb-3">Categories</h3>
 
-          <div className="flex flex-col gap-2 text-[#F3DFC1]">
-            <p>Fiction</p>
-            <p>Fantasy</p>
-            <p>Self Help</p>
-            <p>Classic Literature</p>
+        {/* WHY BOOKNEST */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">
+            Why BookNest?
+          </h3>
+
+          <div className="flex flex-col gap-3 text-[#F3DFC1]">
+
+            <p>📚 Wide Collection of Books</p>
+
+            <p>🚚 Fast & Reliable Delivery</p>
+
+            <p>💰 Affordable Prices</p>
+
+            <p>⭐ Quality Books for Every Reader</p>
+
+            <p>🔒 Safe & Secure Shopping</p>
+
           </div>
         </div>
 
       </div>
 
-      <div className="border-t border-[#8a5b3b] mt-8 pt-5 text-center text-[#d8b894] text-sm">
-        © 2026 BookNest. All rights reserved.
+
+      {/* BOTTOM */}
+      <div className="border-t border-[#8A5B3B] mt-10 pt-6">
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+
+          <p className="text-[#D8B894] text-sm">
+            © 2026 BookNest. All rights reserved.
+          </p>
+
+          <p className="text-[#D8B894] text-sm">
+            Made with ❤️ for book lovers
+          </p>
+
+        </div>
+
       </div>
 
     </footer>
