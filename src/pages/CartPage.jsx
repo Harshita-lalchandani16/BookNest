@@ -1,48 +1,14 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useCart } from "../context/CartContext"
 
 function CartPage() {
-  const [cart, setCart] = useState([])
-
-  // =========================
-  // GET CART FROM LOCAL STORAGE
-  // =========================
-
-  useEffect(() => {
-    try {
-      const savedCart =
-        JSON.parse(localStorage.getItem("cart")) || []
-
-      setCart(savedCart)
-    } catch (error) {
-      console.error("Error loading cart:", error)
-      setCart([])
-    }
-  }, [])
-
-  // =========================
-  // REMOVE BOOK FROM CART
-  // =========================
-
-  const removeFromCart = (id) => {
-    const updatedCart = cart.filter(
-      (book) => book.id !== id
-    )
-
-    // Update CartPage
-    setCart(updatedCart)
-
-    // Update localStorage
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(updatedCart)
-    )
-
-    // Update Navbar cart count
-    window.dispatchEvent(
-      new Event("cartUpdated")
-    )
-  }
+  const {
+    cart,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+    clearCart,
+  } = useCart()
 
   // =========================
   // CALCULATE TOTAL
@@ -50,7 +16,19 @@ function CartPage() {
 
   const totalPrice = cart.reduce(
     (total, book) =>
-      total + Number(book.price || 0),
+      total +
+      Number(book.price || 0) *
+        Number(book.quantity || 1),
+    0
+  )
+
+  // =========================
+  // TOTAL ITEMS
+  // =========================
+
+  const totalItems = cart.reduce(
+    (total, book) =>
+      total + Number(book.quantity || 1),
     0
   )
 
@@ -182,7 +160,61 @@ function CartPage() {
                       ₹{book.price}
                     </p>
 
-                    {/* REMOVE BUTTON */}
+                    {/* ================= QUANTITY ================= */}
+
+                    <div className="flex items-center gap-3 mt-4">
+
+                      <span className="font-semibold text-[#6B4226]">
+                        Quantity:
+                      </span>
+
+                      <div className="flex items-center border border-[#D9C4A5] rounded-lg overflow-hidden">
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            decreaseQuantity(book.id)
+                          }
+                          className="
+                            w-9
+                            h-9
+                            bg-[#F7F1E3]
+                            text-[#6B4226]
+                            font-bold
+                            hover:bg-[#EDE0CA]
+                            transition
+                          "
+                        >
+                          −
+                        </button>
+
+                        <span className="w-10 text-center font-semibold">
+                          {book.quantity || 1}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            increaseQuantity(book.id)
+                          }
+                          className="
+                            w-9
+                            h-9
+                            bg-[#F7F1E3]
+                            text-[#6B4226]
+                            font-bold
+                            hover:bg-[#EDE0CA]
+                            transition
+                          "
+                        >
+                          +
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                    {/* ================= REMOVE ================= */}
 
                     <button
                       type="button"
@@ -199,6 +231,22 @@ function CartPage() {
                     >
                       Remove
                     </button>
+
+                  </div>
+
+                  {/* ================= BOOK TOTAL ================= */}
+
+                  <div className="sm:text-right">
+
+                    <p className="text-sm text-gray-500">
+                      Book Total
+                    </p>
+
+                    <p className="text-xl font-bold text-[#6B4226] mt-1">
+                      ₹
+                      {Number(book.price || 0) *
+                        Number(book.quantity || 1)}
+                    </p>
 
                   </div>
 
@@ -222,6 +270,20 @@ function CartPage() {
 
                 <span>
                   Items
+                </span>
+
+                <span>
+                  {totalItems}
+                </span>
+
+              </div>
+
+              {/* UNIQUE BOOKS */}
+
+              <div className="flex justify-between text-gray-600 mb-4">
+
+                <span>
+                  Books
                 </span>
 
                 <span>
@@ -262,13 +324,34 @@ function CartPage() {
 
               </div>
 
-              {/* CHECKOUT BUTTON */}
+              {/* ================= CLEAR CART ================= */}
+
+              <button
+                type="button"
+                onClick={clearCart}
+                className="
+                  w-full
+                  mt-4
+                  border
+                  border-red-300
+                  text-red-600
+                  py-3
+                  rounded-lg
+                  font-semibold
+                  hover:bg-red-50
+                  transition
+                "
+              >
+                Clear Cart
+              </button>
+
+              {/* ================= CHECKOUT ================= */}
 
               <button
                 type="button"
                 className="
                   w-full
-                  mt-6
+                  mt-3
                   bg-[#6B4226]
                   text-white
                   py-3
