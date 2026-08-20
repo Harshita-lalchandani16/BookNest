@@ -4,35 +4,53 @@ import { Link } from "react-router-dom"
 function CartPage() {
   const [cart, setCart] = useState([])
 
-  // Get cart from localStorage
-  useEffect(() => {
-    const savedCart =
-      JSON.parse(localStorage.getItem("cart")) || []
+  // =========================
+  // GET CART FROM LOCAL STORAGE
+  // =========================
 
-    setCart(savedCart)
+  useEffect(() => {
+    try {
+      const savedCart =
+        JSON.parse(localStorage.getItem("cart")) || []
+
+      setCart(savedCart)
+    } catch (error) {
+      console.error("Error loading cart:", error)
+      setCart([])
+    }
   }, [])
 
-  // Remove book from cart
+  // =========================
+  // REMOVE BOOK FROM CART
+  // =========================
+
   const removeFromCart = (id) => {
     const updatedCart = cart.filter(
       (book) => book.id !== id
     )
 
+    // Update CartPage
     setCart(updatedCart)
 
+    // Update localStorage
     localStorage.setItem(
       "cart",
       JSON.stringify(updatedCart)
     )
+
+    // Update Navbar cart count
+    window.dispatchEvent(
+      new Event("cartUpdated")
+    )
   }
 
-  window.dispatchEvent(
-  new Event("cartUpdated")
-)
+  // =========================
+  // CALCULATE TOTAL
+  // =========================
 
-  // Calculate total
   const totalPrice = cart.reduce(
-    (total, book) => total + book.price,
+    (total, book) =>
+      total + Number(book.price || 0),
     0
   )
 
@@ -59,7 +77,6 @@ function CartPage() {
 
         </div>
 
-
         {/* ================= EMPTY CART ================= */}
 
         {cart.length === 0 ? (
@@ -80,7 +97,17 @@ function CartPage() {
 
             <Link
               to="/"
-              className="inline-block mt-6 bg-[#6B4226] text-white px-6 py-3 rounded-lg hover:bg-[#4F301D] transition"
+              className="
+                inline-block
+                mt-6
+                bg-[#6B4226]
+                text-white
+                px-6
+                py-3
+                rounded-lg
+                hover:bg-[#4F301D]
+                transition
+              "
             >
               Browse Books
             </Link>
@@ -99,12 +126,33 @@ function CartPage() {
 
                 <div
                   key={book.id}
-                  className="bg-white rounded-2xl shadow-md p-5 flex flex-col sm:flex-row gap-5"
+                  className="
+                    bg-white
+                    rounded-2xl
+                    shadow-md
+                    p-5
+                    flex
+                    flex-col
+                    sm:flex-row
+                    gap-5
+                  "
                 >
 
-                  {/* BOOK IMAGE */}
+                  {/* ================= BOOK IMAGE ================= */}
 
-                  <div className="w-full sm:w-32 h-40 bg-[#EDE0CA] rounded-xl flex items-center justify-center p-3">
+                  <div
+                    className="
+                      w-full
+                      sm:w-32
+                      h-40
+                      bg-[#EDE0CA]
+                      rounded-xl
+                      flex
+                      items-center
+                      justify-center
+                      p-3
+                    "
+                  >
 
                     <img
                       src={book.image}
@@ -114,8 +162,7 @@ function CartPage() {
 
                   </div>
 
-
-                  {/* BOOK INFORMATION */}
+                  {/* ================= BOOK INFORMATION ================= */}
 
                   <div className="flex-1">
 
@@ -135,9 +182,20 @@ function CartPage() {
                       ₹{book.price}
                     </p>
 
+                    {/* REMOVE BUTTON */}
+
                     <button
-                      onClick={() => removeFromCart(book.id)}
-                      className="mt-4 text-red-600 font-semibold hover:text-red-800 transition"
+                      type="button"
+                      onClick={() =>
+                        removeFromCart(book.id)
+                      }
+                      className="
+                        mt-4
+                        text-red-600
+                        font-semibold
+                        hover:text-red-800
+                        transition
+                      "
                     >
                       Remove
                     </button>
@@ -150,7 +208,6 @@ function CartPage() {
 
             </div>
 
-
             {/* ================= ORDER SUMMARY ================= */}
 
             <div className="bg-white rounded-2xl shadow-md p-6 h-fit">
@@ -159,27 +216,43 @@ function CartPage() {
                 Order Summary
               </h2>
 
+              {/* ITEMS */}
+
               <div className="flex justify-between text-gray-600 mb-4">
-                <span>Items</span>
+
+                <span>
+                  Items
+                </span>
 
                 <span>
                   {cart.length}
                 </span>
+
               </div>
 
+              {/* SUBTOTAL */}
+
               <div className="flex justify-between text-gray-600 mb-4">
-                <span>Subtotal</span>
+
+                <span>
+                  Subtotal
+                </span>
 
                 <span>
                   ₹{totalPrice}
                 </span>
+
               </div>
+
+              {/* TOTAL */}
 
               <div className="border-t border-[#D9C4A5] pt-4">
 
                 <div className="flex justify-between text-lg font-bold text-[#6B4226]">
 
-                  <span>Total</span>
+                  <span>
+                    Total
+                  </span>
 
                   <span>
                     ₹{totalPrice}
@@ -189,8 +262,21 @@ function CartPage() {
 
               </div>
 
+              {/* CHECKOUT BUTTON */}
+
               <button
-                className="w-full mt-6 bg-[#6B4226] text-white py-3 rounded-lg font-semibold hover:bg-[#4F301D] transition"
+                type="button"
+                className="
+                  w-full
+                  mt-6
+                  bg-[#6B4226]
+                  text-white
+                  py-3
+                  rounded-lg
+                  font-semibold
+                  hover:bg-[#4F301D]
+                  transition
+                "
               >
                 Proceed to Checkout
               </button>
