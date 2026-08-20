@@ -57,10 +57,11 @@ function CategoryPage() {
 
             {categoryBooks.map((book) => (
 
-              <div
-                key={book.id}
-                className="book-card bg-white rounded-2xl overflow-hidden shadow-md"
-              >
+              <Link
+              key={book.id}
+              to={`/book/${book.id}`}
+              className="book-card bg-white rounded-2xl overflow-hidden shadow-md block"
+            >
 
                 <div className="relative bg-[#EDE0CA] p-4 h-[270px] overflow-hidden">
 
@@ -100,7 +101,7 @@ function CategoryPage() {
 
                 </div>
 
-              </div>
+              </Link>
 
             ))}
 

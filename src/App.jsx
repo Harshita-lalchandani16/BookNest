@@ -7,8 +7,11 @@ import Book from "./components/Book"
 import About from "./components/About"
 import Contact from "./components/Contact"
 import Footer from "./components/Footer"
+import ScrollToTop from "./components/ScrollToTop"
 
 import CategoryPage from "./pages/CategoryPage"
+import BookDetails from "./pages/BookDetails"
+
 function Home() {
   return (
     <>
@@ -24,12 +27,17 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
+
+    <ScrollToTop />
+    
       <Navbar />
 
       <Routes>
         <Route path="/" element={<Home />} />
         
         <Route path="/category/:category" element={<CategoryPage />} />
+
+        <Route path="/book/:id" element={<BookDetails />} />
 
       </Routes>
 
