@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, Link } from "react-router-dom"
 
 function Navbar() {
   const [menu, setMenu] = useState(false)
@@ -204,25 +204,30 @@ function Navbar() {
           </button>
 
           {/* CART */}
-          <button
-            className="
-              text-2xl
-              text-[#E8C878]
-              hover:text-[#F3D38A]
-              transition
-            "
-          >
-            🛒
-          </button>
+         <Link
+          to="/cart"
+          className="
+          text-2xl
+          text-[#E8C878]
+          hover:text-[#F3D38A]
+          transition
+          "
+        >
+         🛒
+        </Link>
 
         </div>
 
         {/* MOBILE */}
         <div className="md:hidden flex items-center gap-4">
 
-          <button className="text-2xl text-[#E8C878]">
-            🛒
-          </button>
+         <Link
+         to="/cart"
+         onClick={() => setMenu(false)}
+        className="text-2xl text-[#E8C878]"
+        >
+        🛒
+        </Link>
 
           <button
             onClick={() => setMenu(!menu)}

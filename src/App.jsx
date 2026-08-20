@@ -11,6 +11,7 @@ import ScrollToTop from "./components/ScrollToTop"
 
 import CategoryPage from "./pages/CategoryPage"
 import BookDetails from "./pages/BookDetails"
+import CartPage from "./pages/CartPage"
 
 function Home() {
   return (
@@ -29,7 +30,7 @@ function App() {
     <BrowserRouter>
 
     <ScrollToTop />
-    
+
       <Navbar />
 
       <Routes>
@@ -38,6 +39,8 @@ function App() {
         <Route path="/category/:category" element={<CategoryPage />} />
 
         <Route path="/book/:id" element={<BookDetails />} />
+
+        <Route path="/cart" element={<CartPage />} />
 
       </Routes>
 
