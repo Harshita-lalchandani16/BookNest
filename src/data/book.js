@@ -199,6 +199,60 @@ const books = [
     rating: 4.5,
     image: "https://covers.openlibrary.org/b/isbn/9780062208112-L.jpg",
   },
+  {
+  id: 21,
+  title: "The Little Prince",
+  author: "Antoine de Saint-Exupéry",
+  price: 299,
+  oldPrice: 399,
+  category: "Kids",
+  rating: 4.8,
+  image: "https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg",
+},
+
+{
+  id: 22,
+  title: "Charlie and the Chocolate Factory",
+  author: "Roald Dahl",
+  price: 350,
+  oldPrice: 450,
+  category: "Kids",
+  rating: 4.7,
+  image: "https://covers.openlibrary.org/b/isbn/9780142410318-L.jpg",
+},
+
+{
+  id: 23,
+  title: "Matilda",
+  author: "Roald Dahl",
+  price: 299,
+  oldPrice: 399,
+  category: "Kids",
+  rating: 4.8,
+  image: "https://covers.openlibrary.org/b/isbn/9780142410370-L.jpg",
+},
+
+{
+  id: 24,
+  title: "The Very Hungry Caterpillar",
+  author: "Eric Carle",
+  price: 250,
+  oldPrice: 350,
+  category: "Kids",
+  rating: 4.9,
+  image: "https://covers.openlibrary.org/b/isbn/9780399226908-L.jpg",
+},
+
+{
+  id: 25,
+  title: "The Gruffalo",
+  author: "Julia Donaldson",
+  price: 280,
+  oldPrice: 350,
+  category: "Kids",
+  rating: 4.8,
+  image: "https://covers.openlibrary.org/b/isbn/9780333710937-L.jpg",
+},
 ];
 
 export default books;

@@ -8,6 +8,7 @@ import About from "./components/About"
 import Contact from "./components/Contact"
 import Footer from "./components/Footer"
 
+import CategoryPage from "./pages/CategoryPage"
 function Home() {
   return (
     <>
@@ -27,6 +28,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        
+        <Route path="/category/:category" element={<CategoryPage />} />
+
       </Routes>
 
       <Footer />
