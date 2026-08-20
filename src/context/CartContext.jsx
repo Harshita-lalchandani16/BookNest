@@ -1,4 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 
 const CartContext = createContext()
 
@@ -6,12 +11,25 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart")
 
-    return savedCart ? JSON.parse(savedCart) : []
+    return savedCart
+      ? JSON.parse(savedCart)
+      : []
   })
 
+  // =========================
+  // SAVE CART TO LOCAL STORAGE
+  // =========================
+
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart))
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cart)
+    )
   }, [cart])
+
+  // =========================
+  // ADD TO CART
+  // =========================
 
   const addToCart = (book) => {
     setCart((currentCart) => {
@@ -38,9 +56,11 @@ export function CartProvider({ children }) {
         },
       ]
     })
-
-    window.dispatchEvent(new Event("cartUpdated"))
   }
+
+  // =========================
+  // REMOVE FROM CART
+  // =========================
 
   const removeFromCart = (bookId) => {
     setCart((currentCart) =>
@@ -48,9 +68,11 @@ export function CartProvider({ children }) {
         (item) => item.id !== bookId
       )
     )
-
-    window.dispatchEvent(new Event("cartUpdated"))
   }
+
+  // =========================
+  // INCREASE QUANTITY
+  // =========================
 
   const increaseQuantity = (bookId) => {
     setCart((currentCart) =>
@@ -63,9 +85,11 @@ export function CartProvider({ children }) {
           : item
       )
     )
-
-    window.dispatchEvent(new Event("cartUpdated"))
   }
+
+  // =========================
+  // DECREASE QUANTITY
+  // =========================
 
   const decreaseQuantity = (bookId) => {
     setCart((currentCart) =>
@@ -78,26 +102,39 @@ export function CartProvider({ children }) {
               }
             : item
         )
-        .filter((item) => item.quantity > 0)
+        .filter(
+          (item) => item.quantity > 0
+        )
     )
-
-    window.dispatchEvent(new Event("cartUpdated"))
   }
+
+  // =========================
+  // CLEAR CART
+  // =========================
 
   const clearCart = () => {
     setCart([])
-
-    window.dispatchEvent(new Event("cartUpdated"))
   }
 
+  // =========================
+  // CART COUNT
+  // =========================
+
   const cartCount = cart.reduce(
-    (total, item) => total + item.quantity,
+    (total, item) =>
+      total + item.quantity,
     0
   )
 
+  // =========================
+  // CART TOTAL
+  // =========================
+
   const cartTotal = cart.reduce(
     (total, item) =>
-      total + item.price * item.quantity,
+      total +
+      Number(item.price || 0) *
+        item.quantity,
     0
   )
 
@@ -118,6 +155,10 @@ export function CartProvider({ children }) {
     </CartContext.Provider>
   )
 }
+
+// =========================
+// CUSTOM HOOK
+// =========================
 
 export function useCart() {
   return useContext(CartContext)

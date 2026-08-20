@@ -4,11 +4,11 @@ import {
   useNavigate,
   Link,
 } from "react-router-dom"
+import { useCart } from "../context/CartContext"
 
 function Navbar() {
   const [menu, setMenu] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
-  const [cartCount, setCartCount] = useState(0)
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -17,38 +17,7 @@ function Navbar() {
   // CART COUNT
   // =========================
 
-  const updateCartCount = () => {
-    const savedCart =
-      JSON.parse(localStorage.getItem("cart")) || []
-
-    setCartCount(savedCart.length)
-  }
-
-  useEffect(() => {
-    updateCartCount()
-
-    window.addEventListener(
-      "cartUpdated",
-      updateCartCount
-    )
-
-    window.addEventListener(
-      "storage",
-      updateCartCount
-    )
-
-    return () => {
-      window.removeEventListener(
-        "cartUpdated",
-        updateCartCount
-      )
-
-      window.removeEventListener(
-        "storage",
-        updateCartCount
-      )
-    }
-  }, [])
+const { cartCount } = useCart()
 
   // =========================
   // ACTIVE SECTION
