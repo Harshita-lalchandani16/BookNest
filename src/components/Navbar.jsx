@@ -4,6 +4,7 @@ import {
   useNavigate,
   Link,
 } from "react-router-dom"
+
 import { useCart } from "../context/CartContext"
 
 function Navbar() {
@@ -17,7 +18,7 @@ function Navbar() {
   // CART COUNT
   // =========================
 
-const { cartCount } = useCart()
+  const { cartCount } = useCart()
 
   // =========================
   // ACTIVE SECTION
@@ -38,6 +39,12 @@ const { cartCount } = useCart()
 
     // Cart page
     if (location.pathname === "/cart") {
+      setActiveSection("")
+      return
+    }
+
+    // Wishlist page
+    if (location.pathname === "/wishlist") {
       setActiveSection("")
       return
     }
@@ -157,6 +164,26 @@ const { cartCount } = useCart()
   }
 
   // =========================
+  // WISHLIST BUTTON
+  // =========================
+
+  const WishlistButton = ({ mobile = false }) => {
+    return (
+      <Link
+        to="/wishlist"
+        onClick={() => setMenu(false)}
+        className={`relative ${
+          mobile
+            ? "text-2xl text-[#E8C878]"
+            : "text-2xl text-[#E8C878] hover:text-[#F3D38A] transition"
+        }`}
+      >
+        ❤️
+      </Link>
+    )
+  }
+
+  // =========================
   // CART BUTTON
   // =========================
 
@@ -204,7 +231,9 @@ const { cartCount } = useCart()
 
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-        {/* ================= LOGO ================= */}
+        {/* =========================
+            LOGO
+        ========================= */}
 
         <button
           onClick={goHome}
@@ -214,7 +243,9 @@ const { cartCount } = useCart()
         </button>
 
 
-        {/* ================= DESKTOP ================= */}
+        {/* =========================
+            DESKTOP
+        ========================= */}
 
         <div className="hidden md:flex items-center gap-7">
 
@@ -308,6 +339,11 @@ const { cartCount } = useCart()
           </button>
 
 
+          {/* WISHLIST */}
+
+          <WishlistButton />
+
+
           {/* CART */}
 
           <CartButton />
@@ -315,11 +351,23 @@ const { cartCount } = useCart()
         </div>
 
 
-        {/* ================= MOBILE ================= */}
+        {/* =========================
+            MOBILE
+        ========================= */}
 
         <div className="md:hidden flex items-center gap-4">
 
+          {/* WISHLIST */}
+
+          <WishlistButton mobile />
+
+
+          {/* CART */}
+
           <CartButton mobile />
+
+
+          {/* MENU */}
 
           <button
             onClick={() => setMenu(!menu)}
@@ -333,7 +381,9 @@ const { cartCount } = useCart()
       </div>
 
 
-      {/* ================= MOBILE MENU ================= */}
+      {/* =========================
+          MOBILE MENU
+      ========================= */}
 
       {menu && (
         <div className="md:hidden mt-4 border-t border-[#8A5B3B] pt-4">

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useState } from "react"
 import books from "../data/book"
 import { useCart } from "../context/CartContext"
+import { useWishlist } from "../context/WishlistContext"
 
 function BookDetails() {
   const { id } = useParams()
@@ -10,9 +11,15 @@ function BookDetails() {
 
   const { cart, addToCart } = useCart()
 
+    const { wishlist, addToWishlist, removeFromWishlist } = useWishlist()
+
   const book = books.find(
     (item) => item.id === Number(id)
   )
+  
+  const isWishlisted = wishlist.some(
+  (item) => item.id === book.id
+)
 
   // =========================
   // ADD TO CART
@@ -38,6 +45,13 @@ function BookDetails() {
     }
   }
 
+  const handleWishlist = () => {
+  if (isWishlisted) {
+    removeFromWishlist(book.id)
+  } else {
+    addToWishlist(book)
+  }
+}
   // =========================
   // BOOK NOT FOUND
   // =========================
@@ -126,44 +140,73 @@ function BookDetails() {
 
             {/* BUTTONS */}
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
 
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className="
-                  bg-[#6b4226]
-                  text-white
-                  px-6
-                  py-3
-                  rounded-lg
-                  font-semibold
-                  hover:bg-[#8b5e34]
-                  transition
-                "
-              >
-                Add to Cart
-              </button>
+  {/* ADD TO CART */}
 
-              <button
-                type="button"
-                className="
-                  border-2
-                  border-[#6b4226]
-                  text-[#6b4226]
-                  px-6
-                  py-3
-                  rounded-lg
-                  font-semibold
-                  hover:bg-[#6b4226]
-                  hover:text-white
-                  transition
-                "
-              >
-                Buy Now
-              </button>
+  <button
+    type="button"
+    onClick={handleAddToCart}
+    className="
+      bg-[#6b4226]
+      text-white
+      px-6
+      py-3
+      rounded-lg
+      font-semibold
+      hover:bg-[#8b5e34]
+      transition
+    "
+  >
+    Add to Cart
+  </button>
 
-            </div>
+
+  {/* WISHLIST */}
+
+  <button
+    type="button"
+    onClick={handleWishlist}
+    className="
+      border-2
+      border-[#6b4226]
+      text-[#6b4226]
+      px-6
+      py-3
+      rounded-lg
+      font-semibold
+      hover:bg-[#6b4226]
+      hover:text-white
+      transition
+    "
+  >
+    {isWishlisted
+      ? "❤️ Remove from Wishlist"
+      : "♡ Add to Wishlist"}
+  </button>
+
+
+  {/* BUY NOW */}
+
+  <button
+    type="button"
+    className="
+      border-2
+      border-[#6b4226]
+      text-[#6b4226]
+      px-6
+      py-3
+      rounded-lg
+      font-semibold
+      hover:bg-[#6b4226]
+      hover:text-white
+      transition
+    "
+  >
+    Buy Now
+  </button>
+
+</div>
 
             {/* MESSAGE */}
 

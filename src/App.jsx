@@ -12,6 +12,7 @@ import ScrollToTop from "./components/ScrollToTop"
 import CategoryPage from "./pages/CategoryPage"
 import BookDetails from "./pages/BookDetails"
 import CartPage from "./pages/CartPage"
+import WishlistPage from "./pages/WishlistPage"
 
 function Home() {
   return (
@@ -41,6 +42,8 @@ function App() {
         <Route path="/book/:id" element={<BookDetails />} />
 
         <Route path="/cart" element={<CartPage />} />
+
+        <Route path="/wishlist" element={<WishlistPage />} />
 
       </Routes>
 

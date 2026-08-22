@@ -1,6 +1,26 @@
 import { Link } from "react-router-dom"
+import { useWishlist } from "../context/WishlistContext"
 
 function BookCard({ book }) {
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+  } = useWishlist()
+
+  const liked = isInWishlist(book.id)
+
+  const handleWishlist = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (liked) {
+      removeFromWishlist(book.id)
+    } else {
+      addToWishlist(book)
+    }
+  }
+
   return (
     <Link
       to={`/book/${book.id}`}
@@ -8,15 +28,47 @@ function BookCard({ book }) {
     >
       <div className="overflow-hidden rounded-xl bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
-        <div className="flex h-72 items-center justify-center bg-[#F7F1E3] p-4">
+        {/* IMAGE */}
+
+        <div className="relative flex h-72 items-center justify-center bg-[#F7F1E3] p-4">
+
           <img
             src={book.image}
             alt={book.title}
             className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
           />
+
+          {/* WISHLIST BUTTON */}
+
+          <button
+            type="button"
+            onClick={handleWishlist}
+            className="
+              absolute
+              top-3
+              right-3
+              w-10
+              h-10
+              rounded-full
+              bg-white
+              shadow-md
+              flex
+              items-center
+              justify-center
+              text-xl
+              hover:scale-110
+              transition
+            "
+          >
+            {liked ? "❤️" : "♡"}
+          </button>
+
         </div>
 
+        {/* DETAILS */}
+
         <div className="p-4">
+
           <h3 className="line-clamp-1 text-lg font-semibold text-[#292524]">
             {book.title}
           </h3>
@@ -26,6 +78,7 @@ function BookCard({ book }) {
           </p>
 
           <div className="mt-3 flex items-center justify-between">
+
             <span className="text-lg font-bold text-[#6B4226]">
               ₹{book.price}
             </span>
@@ -33,7 +86,9 @@ function BookCard({ book }) {
             <span className="text-sm text-[#C89B3C]">
               ⭐ {book.rating}
             </span>
+
           </div>
+
         </div>
 
       </div>
