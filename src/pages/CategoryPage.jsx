@@ -5,19 +5,26 @@ import books from "../data/book"
 function CategoryPage() {
   const { category } = useParams()
 
-  const decodedCategory = decodeURIComponent(category)
+  let decodedCategory = ""
+
+  try {
+    decodedCategory = decodeURIComponent(category || "")
+  } catch {
+    decodedCategory = category || ""
+  }
 
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: "instant",
-  })
-}, [category])
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    })
+  }, [category])
 
   const categoryBooks = books.filter(
     (book) =>
-      book.category.toLowerCase() === decodedCategory.toLowerCase()
+      book.category.toLowerCase() ===
+      decodedCategory.toLowerCase()
   )
 
   return (
@@ -25,32 +32,61 @@ function CategoryPage() {
 
       <div className="max-w-7xl mx-auto">
 
-        {/* Back Button */}
+        {/* BACK BUTTON */}
+
         <Link
           to="/"
-          className="inline-flex items-center text-[#6B4226] font-semibold hover:text-[#A06B3B] mb-8"
+          className="
+            inline-flex
+            items-center
+            text-[#6B4226]
+            font-semibold
+            hover:text-[#A06B3B]
+            mb-8
+          "
         >
           ← Back to Home
         </Link>
 
-        {/* Heading */}
+
+        {/* HEADING */}
+
         <div className="mb-10">
 
-          <p className="text-[#C89B3C] uppercase tracking-[3px] text-sm font-semibold">
+          <p
+            className="
+              text-[#C89B3C]
+              uppercase
+              tracking-[3px]
+              text-sm
+              font-semibold
+            "
+          >
             BookNest Collection
           </p>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-[#6B4226] mt-2">
+          <h1
+            className="
+              text-4xl
+              md:text-5xl
+              font-bold
+              text-[#6B4226]
+              mt-2
+            "
+          >
             {decodedCategory} Books
           </h1>
 
           <p className="text-[#6B5140] mt-3">
-            Explore our collection of {decodedCategory.toLowerCase()} books.
+            Explore our collection of{" "}
+            {decodedCategory.toLowerCase()} books.
           </p>
 
         </div>
 
-        {/* Books */}
+
+        {/* BOOKS */}
+
         {categoryBooks.length > 0 ? (
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7">
@@ -58,24 +94,59 @@ function CategoryPage() {
             {categoryBooks.map((book) => (
 
               <Link
-              key={book.id}
-              to={`/book/${book.id}`}
-              className="book-card bg-white rounded-2xl overflow-hidden shadow-md block"
-            >
+                key={book.id}
+                to={`/book/${book.id}`}
+                className="
+                  book-card
+                  bg-white
+                  rounded-2xl
+                  overflow-hidden
+                  shadow-md
+                  block
+                  hover:shadow-xl
+                  hover:-translate-y-1
+                  transition
+                  duration-300
+                "
+              >
 
-                <div className="relative bg-[#EDE0CA] p-4 h-[270px] overflow-hidden">
+                {/* BOOK IMAGE */}
+
+                <div
+                  className="
+                    relative
+                    bg-[#EDE0CA]
+                    p-4
+                    h-[270px]
+                    overflow-hidden
+                  "
+                >
 
                   <img
                     src={book.image}
                     alt={book.title}
-                    className="w-full h-full object-contain"
+                    className="
+                      w-full
+                      h-full
+                      object-contain
+                    "
                   />
 
                 </div>
 
+
+                {/* BOOK DETAILS */}
+
                 <div className="p-5">
 
-                  <h2 className="text-xl font-bold mb-2 text-[#3D2B1F]">
+                  <h2
+                    className="
+                      text-xl
+                      font-bold
+                      mb-2
+                      text-[#3D2B1F]
+                    "
+                  >
                     {book.title}
                   </h2>
 
@@ -87,15 +158,34 @@ function CategoryPage() {
                     {book.category}
                   </p>
 
+
+                  {/* PRICE + BUTTON */}
+
                   <div className="flex justify-between items-center">
 
-                    <span className="text-lg font-bold text-[#6B4226]">
+                    <span
+                      className="
+                        text-lg
+                        font-bold
+                        text-[#6B4226]
+                      "
+                    >
                       ₹{book.price}
                     </span>
 
-                    <button className="bg-[#6B4226] text-white px-4 py-2 rounded-lg hover:bg-[#4F301D] transition">
+                    <span
+                      className="
+                        bg-[#6B4226]
+                        text-white
+                        px-4
+                        py-2
+                        rounded-lg
+                        hover:bg-[#4F301D]
+                        transition
+                      "
+                    >
                       View Book
-                    </button>
+                    </span>
 
                   </div>
 
@@ -109,13 +199,29 @@ function CategoryPage() {
 
         ) : (
 
-          <div className="bg-white rounded-2xl p-10 text-center shadow-md">
+          /* NO BOOKS */
+
+          <div
+            className="
+              bg-white
+              rounded-2xl
+              p-10
+              text-center
+              shadow-md
+            "
+          >
 
             <p className="text-5xl mb-4">
               📚
             </p>
 
-            <h2 className="text-2xl font-bold text-[#6B4226]">
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-[#6B4226]
+              "
+            >
               No Books Found
             </h2>
 
@@ -125,7 +231,16 @@ function CategoryPage() {
 
             <Link
               to="/"
-              className="inline-block mt-6 bg-[#6B4226] text-white px-6 py-3 rounded-lg hover:bg-[#4F301D]"
+              className="
+                inline-block
+                mt-6
+                bg-[#6B4226]
+                text-white
+                px-6
+                py-3
+                rounded-lg
+                hover:bg-[#4F301D]
+              "
             >
               Browse All Books
             </Link>
