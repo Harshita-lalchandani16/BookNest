@@ -309,34 +309,36 @@ function Navbar() {
 
           {/* LOGIN */}
 
-          <button
-            className="
-              border border-white
-              px-4 py-2
-              rounded-lg
-              hover:bg-[#E8C878]
-              hover:text-[#3B2415]
-              transition
-            "
-          >
-            Login
-          </button>
+          <Link
+  to="/login"
+  className="
+    border border-white
+    px-4 py-2
+    rounded-lg
+    hover:bg-[#E8C878]
+    hover:text-[#3B2415]
+    transition
+  "
+>
+  Login
+</Link>
 
 
           {/* SIGN UP */}
 
-          <button
-            className="
-              bg-[#E8C878]
-              text-[#3B2415]
-              px-4 py-2
-              rounded-lg
-              hover:bg-[#D6B45F]
-              transition
-            "
-          >
-            Sign Up
-          </button>
+        <Link
+  to="/signup"
+  className="
+    bg-[#E8C878]
+    text-[#3B2415]
+    px-4 py-2
+    rounded-lg
+    hover:bg-[#D6B45F]
+    transition
+  "
+>
+  Sign Up
+</Link>
 
 
           {/* WISHLIST */}
