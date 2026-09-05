@@ -1,18 +1,54 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react"
 
-import booksData from "../data/book"
-
 const BookContext = createContext()
 
+const API_URL = "http://localhost:5000/api/books"
+
 export function BookProvider({ children }) {
+  const [booksData, setBooksData] = useState([])
+
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("All")
   const [sortBy, setSortBy] = useState("default")
+
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  // =========================
+  // FETCH BOOKS FROM API
+  // =========================
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true)
+        setError("")
+
+        const response = await fetch(API_URL)
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch books")
+        }
+
+        const result = await response.json()
+
+        setBooksData(result.data)
+      } catch (err) {
+        console.error(err)
+        setError("Unable to load books from server.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBooks()
+  }, [])
 
   // =========================
   // FILTER + SEARCH + SORT
@@ -34,12 +70,8 @@ export function BookProvider({ children }) {
 
       filteredBooks = filteredBooks.filter(
         (book) =>
-          book.title
-            .toLowerCase()
-            .includes(searchText) ||
-          book.author
-            .toLowerCase()
-            .includes(searchText)
+          book.title.toLowerCase().includes(searchText) ||
+          book.author.toLowerCase().includes(searchText)
       )
     }
 
@@ -63,7 +95,7 @@ export function BookProvider({ children }) {
     }
 
     return filteredBooks
-  }, [search, category, sortBy])
+  }, [booksData, search, category, sortBy])
 
   // =========================
   // CONTEXT VALUE
@@ -80,6 +112,9 @@ export function BookProvider({ children }) {
 
     sortBy,
     setSortBy,
+
+    loading,
+    error,
   }
 
   return (

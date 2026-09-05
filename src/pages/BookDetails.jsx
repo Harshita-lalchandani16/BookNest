@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom"
 import { useState } from "react"
-import books from "../data/book"
+import { useBooks } from "../context/BookContext"
 import { useCart } from "../context/CartContext"
 import { useWishlist } from "../context/WishlistContext"
 
 function BookDetails() {
   const { id } = useParams()
 
+  const { books } = useBooks()
+  
   const [message, setMessage] = useState("")
 
   const { cart, addToCart } = useCart()
