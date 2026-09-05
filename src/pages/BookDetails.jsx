@@ -8,7 +8,7 @@ function BookDetails() {
   const { id } = useParams()
 
   const { books } = useBooks()
-  
+
   const [message, setMessage] = useState("")
 
   const { cart, addToCart } = useCart()
@@ -133,11 +133,8 @@ function BookDetails() {
 
             {/* DESCRIPTION */}
 
-            <p className="text-gray-600 leading-relaxed mb-8">
-              Discover this wonderful book and add it to
-              your personal collection. Enjoy an engaging
-              reading experience with this popular title
-              from our bookstore.
+           <p className="text-gray-600 leading-relaxed mb-8">
+             {book.description}
             </p>
 
             {/* BUTTONS */}
