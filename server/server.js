@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit"
 import authRoutes from "./routes/authRoutes.js"
 import connectDB from "./config/db.js"
 import bookRoutes from "./routes/bookRoutes.js"
+import { protect } from "./middleware/authMiddleware.js"
 
 dotenv.config()
 
@@ -82,6 +83,18 @@ app.use("/api/books", bookRoutes)
 // ===============================
 
 app.use("/api/auth", authRoutes)
+
+// ===============================
+// PROTECTED TEST ROUTE
+// ===============================
+
+app.get("/api/profile", protect, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Protected route accessed successfully",
+    user: req.user,
+  })
+})
 
 // ===============================
 // 404 HANDLER
