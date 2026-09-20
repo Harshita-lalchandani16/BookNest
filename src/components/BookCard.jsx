@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useWishlist } from "../context/WishlistContext"
 
 function BookCard({ book }) {
@@ -8,7 +8,12 @@ function BookCard({ book }) {
     isInWishlist,
   } = useWishlist()
 
+  const navigate = useNavigate()
+
   const liked = isInWishlist(book.id)
+
+  const isAdmin =
+    localStorage.getItem("role") === "admin"
 
   const handleWishlist = (e) => {
     e.preventDefault()
@@ -19,6 +24,60 @@ function BookCard({ book }) {
     } else {
       addToWishlist(book)
     }
+  }
+
+  // =========================
+  // DELETE BOOK
+  // =========================
+
+  const handleDelete = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${book.title}"?`
+    )
+
+    if (!confirmDelete) return
+
+    const token = localStorage.getItem("token")
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/books/${book.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        alert(data.message || "Failed to delete book")
+        return
+      }
+
+      alert("Book deleted successfully")
+
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+      alert("Unable to connect to server")
+    }
+  }
+
+  // =========================
+  // EDIT BOOK
+  // =========================
+
+  const handleEdit = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    navigate(`/book/${book.id}?edit=true`)
   }
 
   return (
@@ -38,7 +97,7 @@ function BookCard({ book }) {
             className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
           />
 
-          {/* WISHLIST BUTTON */}
+          {/* WISHLIST */}
 
           <button
             type="button"
@@ -88,6 +147,48 @@ function BookCard({ book }) {
             </span>
 
           </div>
+
+          {/* ADMIN CONTROLS */}
+
+          {isAdmin && (
+            <div className="flex gap-2 mt-4">
+
+              <button
+                type="button"
+                onClick={handleEdit}
+                className="
+                  flex-1
+                  bg-[#C89B3C]
+                  text-white
+                  py-2
+                  rounded-lg
+                  font-semibold
+                  hover:bg-[#A77C2F]
+                  transition
+                "
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="
+                  flex-1
+                  bg-red-700
+                  text-white
+                  py-2
+                  rounded-lg
+                  font-semibold
+                  hover:bg-red-800
+                  transition
+                "
+              >
+                Delete
+              </button>
+
+            </div>
+          )}
 
         </div>
 

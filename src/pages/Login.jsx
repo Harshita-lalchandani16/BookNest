@@ -1,6 +1,73 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 function Login() {
+  const navigate = useNavigate()
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+
+    setMessage("")
+    setLoading(true)
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setMessage(data.message || "Login failed")
+        setLoading(false)
+        return
+      }
+
+      // SAVE JWT TOKEN
+      localStorage.setItem("token", data.token)
+
+      // SAVE USER ROLE
+      localStorage.setItem(
+        "role",
+        data.user?.role || "user"
+      )
+
+      // SAVE USER DATA
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      )
+
+      setMessage("Login successful!")
+
+      // Go to home page
+      setTimeout(() => {
+        navigate("/")
+      }, 500)
+
+    } catch (error) {
+      console.error(error)
+      setMessage("Unable to connect to server")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-[#F7F1E3] px-6 py-16 flex items-center">
 
@@ -26,19 +93,27 @@ function Login() {
 
           </div>
 
-
           {/* FORM */}
 
-          <form className="space-y-5">
+          <form
+            onSubmit={handleLogin}
+            className="space-y-5"
+          >
+
+            {/* EMAIL */}
 
             <div>
+
               <label className="block text-sm font-semibold text-[#6B4226] mb-2">
                 Email
               </label>
 
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                required
                 className="
                   w-full
                   border
@@ -51,17 +126,23 @@ function Login() {
                   focus:ring-[#E8C878]
                 "
               />
+
             </div>
 
+            {/* PASSWORD */}
 
             <div>
+
               <label className="block text-sm font-semibold text-[#6B4226] mb-2">
                 Password
               </label>
 
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
+                required
                 className="
                   w-full
                   border
@@ -74,11 +155,14 @@ function Login() {
                   focus:ring-[#E8C878]
                 "
               />
+
             </div>
 
+            {/* LOGIN BUTTON */}
 
             <button
               type="submit"
+              disabled={loading}
               className="
                 w-full
                 bg-[#6B4226]
@@ -88,13 +172,21 @@ function Login() {
                 font-semibold
                 hover:bg-[#4F301D]
                 transition
+                disabled:opacity-60
               "
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
 
           </form>
 
+          {/* MESSAGE */}
+
+          {message && (
+            <p className="mt-4 text-center font-semibold text-green-700">
+              {message}
+            </p>
+          )}
 
           {/* SIGNUP LINK */}
 
