@@ -3,8 +3,8 @@ import cors from "cors"
 import dotenv from "dotenv"
 import helmet from "helmet"
 import rateLimit from "express-rate-limit"
-import authRoutes from "./routes/authRoutes.js"
 
+import authRoutes from "./routes/authRoutes.js"
 import connectDB from "./config/db.js"
 import bookRoutes from "./routes/bookRoutes.js"
 
@@ -12,7 +12,10 @@ dotenv.config()
 
 const app = express()
 
+// ===============================
 // CONNECT DATABASE
+// ===============================
+
 connectDB()
 
 // ===============================
@@ -22,7 +25,11 @@ connectDB()
 // Helmet - adds security-related HTTP headers
 app.use(helmet())
 
-// CORS - allow requests from React frontend
+// ===============================
+// CORS
+// ===============================
+
+// Allow requests from React frontend
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -30,7 +37,10 @@ app.use(
   })
 )
 
+// ===============================
 // JSON BODY PARSER
+// ===============================
+
 // Limits incoming JSON request size to 10 KB
 app.use(express.json({ limit: "10kb" }))
 
@@ -68,6 +78,12 @@ app.get("/api/health", (req, res) => {
 app.use("/api/books", bookRoutes)
 
 // ===============================
+// AUTHENTICATION ROUTES
+// ===============================
+
+app.use("/api/auth", authRoutes)
+
+// ===============================
 // 404 HANDLER
 // ===============================
 
@@ -93,7 +109,7 @@ app.use((err, req, res, next) => {
         : err.message,
   })
 })
-app.use("/api/auth", authRoutes)
+
 // ===============================
 // START SERVER
 // ===============================
