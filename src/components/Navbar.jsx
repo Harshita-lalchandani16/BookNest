@@ -1,499 +1,136 @@
-import { useState, useEffect } from "react"
-import {
-  useLocation,
-  useNavigate,
-  Link,
-} from "react-router-dom"
-
-import { useCart } from "../context/CartContext"
+import { Link, NavLink, useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 function Navbar() {
-  const [menu, setMenu] = useState(false)
-  const [activeSection, setActiveSection] = useState("home")
-
   const navigate = useNavigate()
-  const location = useLocation()
 
-  // =========================
-  // CART COUNT
-  // =========================
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token")
+  )
 
-  const { cartCount } = useCart()
+  const role = localStorage.getItem("role")
+  const user = JSON.parse(localStorage.getItem("user") || "null")
 
-  // =========================
-  // ACTIVE SECTION
-  // =========================
+  const isAdmin = role === "admin"
 
-  useEffect(() => {
-    // Category pages
-    if (location.pathname.startsWith("/category/")) {
-      setActiveSection("categories")
-      return
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("role")
+    localStorage.removeItem("user")
 
-    // Book details page
-    if (location.pathname.startsWith("/book/")) {
-      setActiveSection("books")
-      return
-    }
+    setIsLoggedIn(false)
 
-    // Cart page
-    if (location.pathname === "/cart") {
-      setActiveSection("")
-      return
-    }
-
-    // Wishlist page
-    if (location.pathname === "/wishlist") {
-      setActiveSection("")
-      return
-    }
-
-    // Only observe sections on Home page
-    if (location.pathname !== "/") {
-      return
-    }
-
-    const sections = [
-      "home",
-      "categories",
-      "books",
-      "about",
-      "contact",
-    ]
-
-    const sectionElements = sections
-      .map((id) => document.getElementById(id))
-      .filter(Boolean)
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleSections = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              a.boundingClientRect.top -
-              b.boundingClientRect.top
-          )
-
-        if (visibleSections.length > 0) {
-          setActiveSection(
-            visibleSections[0].target.id
-          )
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-100px 0px -55% 0px",
-        threshold: 0,
-      }
-    )
-
-    sectionElements.forEach((section) => {
-      observer.observe(section)
-    })
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [location.pathname])
-
-  // =========================
-  // GO HOME
-  // =========================
-
-  const goHome = () => {
-    setMenu(false)
-
-    if (location.pathname === "/") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      })
-    } else {
-      navigate("/")
-    }
-  }
-
-  // =========================
-  // GO TO SECTION
-  // =========================
-
-  const goToSection = (section) => {
-    setMenu(false)
-
-    if (location.pathname === "/") {
-      const element =
-        document.getElementById(section)
-
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }
-
-      return
-    }
-
-    navigate("/")
-
-    setTimeout(() => {
-      const element =
-        document.getElementById(section)
-
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }
-    }, 150)
-  }
-
-  // =========================
-  // ACTIVE NAV CLASS
-  // =========================
-
-  const navClass = (section) => {
-    return `transition ${
-      activeSection === section
-        ? "text-[#E8C878] font-semibold"
-        : "text-white hover:text-[#E8C878]"
-    }`
-  }
-
-  // =========================
-  // WISHLIST BUTTON
-  // =========================
-
-  const WishlistButton = ({ mobile = false }) => {
-    return (
-      <Link
-        to="/wishlist"
-        onClick={() => setMenu(false)}
-        className={`relative ${
-          mobile
-            ? "text-2xl text-[#E8C878]"
-            : "text-2xl text-[#E8C878] hover:text-[#F3D38A] transition"
-        }`}
-      >
-        ❤️
-      </Link>
-    )
-  }
-
-  // =========================
-  // CART BUTTON
-  // =========================
-
-  const CartButton = ({ mobile = false }) => {
-    return (
-      <Link
-        to="/cart"
-        onClick={() => setMenu(false)}
-        className={`relative ${
-          mobile
-            ? "text-2xl text-[#E8C878]"
-            : "text-2xl text-[#E8C878] hover:text-[#F3D38A] transition"
-        }`}
-      >
-        🛒
-
-        {cartCount > 0 && (
-          <span
-            className="
-              absolute
-              -top-2
-              -right-3
-              min-w-[20px]
-              h-5
-              px-1
-              rounded-full
-              bg-[#E8C878]
-              text-[#3B2415]
-              text-xs
-              font-bold
-              flex
-              items-center
-              justify-center
-            "
-          >
-            {cartCount}
-          </span>
-        )}
-      </Link>
-    )
+    navigate("/login")
   }
 
   return (
-    <nav className="bg-[#6B4226] text-white px-5 py-4 sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 bg-[#6B4226] text-white shadow-md">
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-4">
 
-        {/* =========================
-            LOGO
-        ========================= */}
+        <div className="flex items-center justify-between">
 
-        <button
-          onClick={goHome}
-          className="text-2xl font-bold hover:text-[#E8C878] transition"
-        >
-          📚 BookNest
-        </button>
-
-
-        {/* =========================
-            DESKTOP
-        ========================= */}
-
-        <div className="hidden md:flex items-center gap-7">
-
-          {/* HOME */}
-
-          <button
-            onClick={goHome}
-            className={navClass("home")}
-          >
-            Home
-          </button>
-
-
-          {/* CATEGORIES */}
-
-          <button
-            onClick={() =>
-              goToSection("categories")
-            }
-            className={navClass("categories")}
-          >
-            Categories
-          </button>
-
-
-          {/* BOOKS */}
-
-          <button
-            onClick={() =>
-              goToSection("books")
-            }
-            className={navClass("books")}
-          >
-            Books
-          </button>
-
-
-          {/* ABOUT */}
-
-          <button
-            onClick={() =>
-              goToSection("about")
-            }
-            className={navClass("about")}
-          >
-            About
-          </button>
-
-
-          {/* CONTACT */}
-
-          <button
-            onClick={() =>
-              goToSection("contact")
-            }
-            className={navClass("contact")}
-          >
-            Contact
-          </button>
-
-
-          {/* LOGIN */}
-
+          {/* LOGO */}
           <Link
-  to="/login"
-  className="
-    border border-white
-    px-4 py-2
-    rounded-lg
-    hover:bg-[#E8C878]
-    hover:text-[#3B2415]
-    transition
-  "
->
-  Login
-</Link>
-
-
-          {/* SIGN UP */}
-
-        <Link
-  to="/signup"
-  className="
-    bg-[#E8C878]
-    text-[#3B2415]
-    px-4 py-2
-    rounded-lg
-    hover:bg-[#D6B45F]
-    transition
-  "
->
-  Sign Up
-</Link>
-
-
-          {/* WISHLIST */}
-
-          <WishlistButton />
-
-
-          {/* CART */}
-
-          <CartButton />
-
-        </div>
-
-
-        {/* =========================
-            MOBILE
-        ========================= */}
-
-        <div className="md:hidden flex items-center gap-4">
-
-          {/* WISHLIST */}
-
-          <WishlistButton mobile />
-
-
-          {/* CART */}
-
-          <CartButton mobile />
-
-
-          {/* MENU */}
-
-          <button
-            onClick={() => setMenu(!menu)}
-            className="text-2xl"
+            to="/"
+            className="text-2xl font-bold tracking-wide"
           >
-            {menu ? "✕" : "☰"}
-          </button>
+            📚 BookNest
+          </Link>
 
-        </div>
+          {/* NAVIGATION */}
+          <div className="hidden md:flex items-center gap-6">
 
-      </div>
-
-
-      {/* =========================
-          MOBILE MENU
-      ========================= */}
-
-      {menu && (
-        <div className="md:hidden mt-4 border-t border-[#8A5B3B] pt-4">
-
-          <div className="flex flex-col gap-4">
-
-            {/* HOME */}
-
-            <button
-              onClick={goHome}
-              className={`text-left ${navClass("home")}`}
+            <NavLink
+              to="/"
+              className="hover:text-[#E8C878] transition"
             >
               Home
-            </button>
+            </NavLink>
 
-
-            {/* CATEGORIES */}
-
-            <button
-              onClick={() =>
-                goToSection("categories")
-              }
-              className={`text-left ${navClass(
-                "categories"
-              )}`}
+            <NavLink
+              to="/categories"
+              className="hover:text-[#E8C878] transition"
             >
               Categories
-            </button>
+            </NavLink>
 
-
-            {/* BOOKS */}
-
-            <button
-              onClick={() =>
-                goToSection("books")
-              }
-              className={`text-left ${navClass(
-                "books"
-              )}`}
+            <NavLink
+              to="/wishlist"
+              className="hover:text-[#E8C878] transition"
             >
-              Books
-            </button>
+              Wishlist
+            </NavLink>
 
-
-            {/* ABOUT */}
-
-            <button
-              onClick={() =>
-                goToSection("about")
-              }
-              className={`text-left ${navClass(
-                "about"
-              )}`}
+            <NavLink
+              to="/cart"
+              className="hover:text-[#E8C878] transition"
             >
-              About
-            </button>
+              🛒 Cart
+            </NavLink>
 
+          </div>
 
-            {/* CONTACT */}
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-3">
 
-            <button
-              onClick={() =>
-                goToSection("contact")
-              }
-              className={`text-left ${navClass(
-                "contact"
-              )}`}
-            >
-              Contact
-            </button>
+            {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/login"
+                  className="border border-[#E8C878] px-4 py-2 rounded-lg hover:bg-[#E8C878] hover:text-[#6B4226] transition"
+                >
+                  Login
+                </Link>
 
+                <Link
+                  to="/signup"
+                  className="bg-[#C89B3C] px-4 py-2 rounded-lg font-semibold hover:bg-[#E8C878] hover:text-[#6B4226] transition"
+                >
+                  Sign Up
+                </Link>
+              </>
+            ) : (
+              <>
+                {/* USER INFO */}
+                <div className="hidden lg:block text-right">
 
-            {/* LOGIN + SIGN UP */}
+                  <p className="text-sm font-semibold">
+                    {user?.name || user?.email || "User"}
+                  </p>
 
-            <div className="flex items-center gap-3 pt-2">
+                  <p className="text-xs text-[#E8C878] uppercase">
+                    {role}
+                  </p>
 
-              <button
-                className="
-                  border border-white
-                  px-4 py-2
-                  rounded-lg
-                  hover:bg-[#E8C878]
-                  hover:text-[#3B2415]
-                  transition
-                "
-              >
-                Login
-              </button>
+                </div>
 
-              <button
-                className="
-                  bg-[#E8C878]
-                  text-[#3B2415]
-                  px-4 py-2
-                  rounded-lg
-                  hover:bg-[#D6B45F]
-                  transition
-                "
-              >
-                Sign Up
-              </button>
+                {/* ADMIN PANEL */}
+                {isAdmin && (
+                  <Link
+                    to="/"
+                    className="border border-[#E8C878] px-4 py-2 rounded-lg hover:bg-[#E8C878] hover:text-[#6B4226] transition"
+                  >
+                    ⚙️ Admin
+                  </Link>
+                )}
 
-            </div>
+                {/* LOGOUT */}
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="bg-[#C89B3C] px-4 py-2 rounded-lg font-semibold hover:bg-[#E8C878] hover:text-[#6B4226] transition"
+                >
+                  Logout
+                </button>
+              </>
+            )}
 
           </div>
 
         </div>
-      )}
+
+      </div>
 
     </nav>
   )
