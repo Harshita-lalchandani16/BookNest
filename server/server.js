@@ -2,6 +2,8 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import helmet from "helmet"
+import rateLimit from "express-rate-limit"
+
 
 import connectDB from "./config/db.js"
 import bookRoutes from "./routes/bookRoutes.js"
@@ -19,6 +21,16 @@ app.use(helmet())
 // MIDDLEWARE
 app.use(cors())
 app.use(express.json({ limit: "10kb" }))
+// RATE LIMITER
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: {
+    message: "Too many requests. Please try again later.",
+  },
+})
+
+app.use("/api", apiLimiter)
 
 // HEALTH CHECK
 app.get("/api/health", (req, res) => {
