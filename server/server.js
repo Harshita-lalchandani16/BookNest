@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import helmet from "helmet"
 import rateLimit from "express-rate-limit"
+import authRoutes from "./routes/authRoutes.js"
 
 import connectDB from "./config/db.js"
 import bookRoutes from "./routes/bookRoutes.js"
@@ -92,7 +93,7 @@ app.use((err, req, res, next) => {
         : err.message,
   })
 })
-
+app.use("/api/auth", authRoutes)
 // ===============================
 // START SERVER
 // ===============================
