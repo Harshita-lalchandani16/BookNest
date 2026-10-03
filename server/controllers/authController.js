@@ -2,11 +2,15 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
 
-// REGISTER
+// ==============================
+// REGISTER USER
+// ==============================
+
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body
 
+    // Check required fields
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -14,6 +18,7 @@ export const register = async (req, res) => {
       })
     }
 
+    // Check password length
     if (password.length < 6) {
       return res.status(400).json({
         success: false,
@@ -21,7 +26,10 @@ export const register = async (req, res) => {
       })
     }
 
-    const existingUser = await User.findOne({ email })
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      email: email.toLowerCase(),
+    })
 
     if (existingUser) {
       return res.status(409).json({
@@ -30,16 +38,19 @@ export const register = async (req, res) => {
       })
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    // Create user
+    // Every new signup is a NORMAL USER
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       role: "user",
     })
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "User registered successfully",
       data: {
@@ -50,7 +61,9 @@ export const register = async (req, res) => {
       },
     })
   } catch (error) {
-    res.status(500).json({
+    console.error("Registration Error:", error)
+
+    return res.status(500).json({
       success: false,
       message: "Registration failed",
       error: error.message,
@@ -58,11 +71,15 @@ export const register = async (req, res) => {
   }
 }
 
-// LOGIN
+// ==============================
+// LOGIN USER
+// ==============================
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body
 
+    // Check required fields
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -70,7 +87,10 @@ export const login = async (req, res) => {
       })
     }
 
-    const user = await User.findOne({ email })
+    // Find user
+    const user = await User.findOne({
+      email: email.toLowerCase(),
+    })
 
     if (!user) {
       return res.status(401).json({
@@ -79,6 +99,7 @@ export const login = async (req, res) => {
       })
     }
 
+    // Compare password
     const isPasswordValid = await bcrypt.compare(
       password,
       user.password
@@ -91,6 +112,7 @@ export const login = async (req, res) => {
       })
     }
 
+    // Create JWT token
     const token = jwt.sign(
       {
         userId: user._id,
@@ -102,7 +124,8 @@ export const login = async (req, res) => {
       }
     )
 
-    res.status(200).json({
+    // Send response
+    return res.status(200).json({
       success: true,
       message: "Login successful",
       token,
@@ -114,7 +137,9 @@ export const login = async (req, res) => {
       },
     })
   } catch (error) {
-    res.status(500).json({
+    console.error("Login Error:", error)
+
+    return res.status(500).json({
       success: false,
       message: "Login failed",
       error: error.message,

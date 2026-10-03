@@ -31,25 +31,56 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
-
-    <ScrollToTop />
+      <ScrollToTop />
 
       <Navbar />
 
       <Routes>
+
+        {/* HOME */}
         <Route path="/" element={<Home />} />
-        
-        <Route path="/category/:category" element={<CategoryPage />} />
 
-        <Route path="/book/:id" element={<BookDetails />} />
+        {/* ALL CATEGORIES */}
+        <Route
+          path="/categories"
+          element={<Categories />}
+        />
 
-        <Route path="/cart" element={<CartPage />} />
+        {/* CATEGORY-WISE BOOKS */}
+        <Route
+          path="/category/:category"
+          element={<CategoryPage />}
+        />
 
-        <Route path="/wishlist" element={<WishlistPage />} />
+        {/* BOOK DETAILS */}
+        <Route
+          path="/book/:id"
+          element={<BookDetails />}
+        />
 
-        <Route path="/login" element={<Login />} />
+        {/* CART */}
+        <Route
+          path="/cart"
+          element={<CartPage />}
+        />
 
-        <Route path="/signup" element={<Signup />} />
+        {/* WISHLIST */}
+        <Route
+          path="/wishlist"
+          element={<WishlistPage />}
+        />
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        {/* SIGNUP */}
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
 
       </Routes>
 

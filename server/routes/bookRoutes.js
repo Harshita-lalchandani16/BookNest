@@ -9,7 +9,8 @@ import {
 } from "../controllers/bookController.js"
 import {
   protect,
-  authorize,
+  adminOnly,
+
 } from "../middleware/authMiddleware.js"
 
 const router = express.Router()
@@ -25,21 +26,21 @@ router.get("/:id", getBookById)
 router.post(
   "/",
   protect,
-  authorize("admin"),
+  adminOnly,
   createBook
 )
 
 router.put(
   "/:id",
   protect,
-  authorize("admin"),
+  adminOnly,
   updateBook
 )
 
 router.delete(
   "/:id",
   protect,
-  authorize("admin"),
+  adminOnly,
   deleteBook
 )
 

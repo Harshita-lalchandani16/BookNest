@@ -1,3 +1,5 @@
+import http from "http"
+import { WebSocketServer } from "ws"
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
@@ -51,7 +53,7 @@ app.use(express.json({ limit: "10kb" }))
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 7,
   message: {
     success: false,
     message: "Too many requests. Please try again later.",
@@ -124,11 +126,62 @@ app.use((err, req, res, next) => {
 })
 
 // ===============================
-// START SERVER
+// CREATE HTTP SERVER
 // ===============================
 
 const PORT = process.env.PORT || 5000
 
-app.listen(PORT, () => {
+const server = http.createServer(app)
+
+// ===============================
+// WEBSOCKET SERVER
+// ===============================
+
+const wss = new WebSocketServer({
+  server,
+  path: "/ws",
+})
+
+// ===============================
+// WEBSOCKET CONNECTION
+// ===============================
+
+wss.on("connection", (socket) => {
+  console.log("WebSocket client connected")
+
+  socket.send(
+    JSON.stringify({
+      type: "welcome",
+      message: "Connected to BookNest real-time server",
+    })
+  )
+
+  socket.on("message", (data) => {
+    const message = data.toString()
+
+    console.log("Received:", message)
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === 1) {
+        client.send(
+          JSON.stringify({
+            type: "live-update",
+            message,
+          })
+        )
+      }
+    })
+  })
+
+  socket.on("close", () => {
+    console.log("WebSocket client disconnected")
+  })
+})
+
+// ===============================
+// START SERVER
+// ===============================
+
+server.listen(PORT, () => {
   console.log(`BookNest API running on http://localhost:${PORT}`)
 })
