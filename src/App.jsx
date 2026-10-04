@@ -15,6 +15,7 @@ import CartPage from "./pages/CartPage"
 import WishlistPage from "./pages/WishlistPage"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
+import LiveUpdates from "./components/LiveUpdates";
 
 function Home() {
   return (
@@ -22,6 +23,7 @@ function Home() {
       <Hero />
       <Categories />
       <Book />
+      <LiveUpdates/>
       <About />
       <Contact />
     </>
