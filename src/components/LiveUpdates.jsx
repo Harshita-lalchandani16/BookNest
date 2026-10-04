@@ -85,11 +85,19 @@ function LiveUpdates() {
         </h2>
 
         <p className="mb-4">
-          Status:{" "}
-          <span className="font-semibold">
-            {connectionStatus}
-          </span>
-        </p>
+  Status:{" "}
+  <span
+    className={`font-semibold ${
+      connectionStatus === "Connected"
+        ? "text-green-700"
+        : connectionStatus === "Connecting..."
+        ? "text-yellow-700"
+        : "text-red-700"
+    }`}
+  >
+    {connectionStatus}
+  </span>
+</p>
 
         <div className="flex gap-2 mb-6">
           <input
