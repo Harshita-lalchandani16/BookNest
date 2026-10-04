@@ -1,0 +1,8 @@
+services:
+  booknest:
+    build: .
+    container_name: booknest-container
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env

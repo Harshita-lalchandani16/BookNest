@@ -35,7 +35,10 @@ app.use(helmet())
 // Allow requests from React frontend
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://book-nest-orcin.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 )
