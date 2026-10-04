@@ -7,42 +7,57 @@ function LiveUpdates() {
   const [updates, setUpdates] = useState([]);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:5000/ws");
+  let ws
+  let reconnectTimer
+
+  const connectWebSocket = () => {
+    setConnectionStatus("Connecting...")
+
+    ws = new WebSocket("ws://localhost:5000/ws")
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log("WebSocket connected")
 
-      setConnectionStatus("Connected");
-      setSocket(ws);
-    };
+      setConnectionStatus("Connected")
+      setSocket(ws)
+    }
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      const data = JSON.parse(event.data)
 
       setUpdates((previous) => [
         ...previous,
         data.message,
-      ]);
-    };
+      ])
+    }
 
     ws.onclose = () => {
-      console.log("WebSocket disconnected");
+      console.log("WebSocket disconnected")
 
-      setConnectionStatus("Disconnected");
-      setSocket(null);
-    };
+      setConnectionStatus("Disconnected")
+      setSocket(null)
+
+      reconnectTimer = setTimeout(() => {
+        connectWebSocket()
+      }, 3000)
+    }
 
     ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
+      console.error("WebSocket error:", error)
+      setConnectionStatus("Connection Error")
+    }
+  }
 
-      setConnectionStatus("Connection Error");
-    };
+  connectWebSocket()
 
-    return () => {
-      ws.close();
-    };
-  }, []);
+  return () => {
+    clearTimeout(reconnectTimer)
 
+    if (ws) {
+      ws.close()
+    }
+  }
+}, [])
   const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
       console.log("WebSocket is not connected");
