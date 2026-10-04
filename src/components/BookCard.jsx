@@ -44,7 +44,7 @@ function BookCard({ book }) {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/books/${book.id}`,
+        `https://booknest-backend-jv6i.onrender.com/api/books/${book.id}`,
         {
           method: "DELETE",
           headers: {

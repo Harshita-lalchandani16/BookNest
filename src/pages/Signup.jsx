@@ -54,7 +54,7 @@ function Signup() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/register",
+        "https://booknest-backend-jv6i.onrender.com/api/auth/register",
         {
           method: "POST",
           headers: {

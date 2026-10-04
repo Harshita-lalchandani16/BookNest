@@ -13,7 +13,7 @@ function LiveUpdates() {
   const connectWebSocket = () => {
     setConnectionStatus("Connecting...");
 
-    ws = new WebSocket("ws://localhost:5000/ws");
+    ws = new WebSocket("wss://booknest-backend-jv6i.onrender.com/ws");
 
     ws.onopen = () => {
       console.log("WebSocket connected");
