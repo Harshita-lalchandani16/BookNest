@@ -7,7 +7,6 @@ import { BookProvider } from "./context/BookContext.jsx"
 import { WishlistProvider } from "./context/WishlistContext.jsx"
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
     <BookProvider>
       <CartProvider>
         <WishlistProvider>
@@ -15,5 +14,4 @@ createRoot(document.getElementById("root")).render(
         </WishlistProvider>
       </CartProvider>
     </BookProvider>
-  </StrictMode>
 )

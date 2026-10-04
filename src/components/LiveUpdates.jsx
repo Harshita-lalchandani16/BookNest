@@ -23,13 +23,16 @@ function LiveUpdates() {
     };
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+  const data = JSON.parse(event.data)
 
-      setUpdates((previous) => [
-        ...previous,
-        data.message,
-      ]);
-    };
+  setUpdates((previous) => [
+    ...previous,
+    {
+      message: data.message,
+      timestamp: data.timestamp,
+    },
+  ])
+}
 
     ws.onclose = () => {
       console.log("WebSocket disconnected");
@@ -125,14 +128,20 @@ function LiveUpdates() {
           <p>No updates yet.</p>
         ) : (
           <ul className="space-y-2">
-            {updates.map((update, index) => (
-              <li
-                key={index}
-                className="bg-[#F7F1E3] p-3 rounded"
-              >
-                {update}
-              </li>
-            ))}
+           {updates.map((update, index) => (
+  <li
+    key={index}
+    className="bg-[#F7F1E3] p-3 rounded"
+  >
+    <p>{update.message}</p>
+
+    {update.timestamp && (
+      <p className="text-sm text-gray-600 mt-1">
+        {update.timestamp}
+      </p>
+    )}
+  </li>
+))}
           </ul>
         )}
 
