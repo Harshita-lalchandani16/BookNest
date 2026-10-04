@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function LiveUpdates() {
   const [socket, setSocket] = useState(null);
-  const [connected, setConnected] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState("Connecting...");
   const [message, setMessage] = useState("");
   const [updates, setUpdates] = useState([]);
 
@@ -11,7 +11,8 @@ function LiveUpdates() {
 
     ws.onopen = () => {
       console.log("WebSocket connected");
-      setConnected(true);
+
+      setConnectionStatus("Connected");
       setSocket(ws);
     };
 
@@ -26,11 +27,15 @@ function LiveUpdates() {
 
     ws.onclose = () => {
       console.log("WebSocket disconnected");
-      setConnected(false);
+
+      setConnectionStatus("Disconnected");
+      setSocket(null);
     };
 
     ws.onerror = (error) => {
       console.error("WebSocket error:", error);
+
+      setConnectionStatus("Connection Error");
     };
 
     return () => {
@@ -40,6 +45,7 @@ function LiveUpdates() {
 
   const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.log("WebSocket is not connected");
       return;
     }
 
@@ -47,7 +53,10 @@ function LiveUpdates() {
       return;
     }
 
+    console.log("Sending message:", message);
+
     socket.send(message);
+
     setMessage("");
   };
 
@@ -62,7 +71,7 @@ function LiveUpdates() {
         <p className="mb-4">
           Status:{" "}
           <span className="font-semibold">
-            {connected ? "Connected" : "Disconnected"}
+            {connectionStatus}
           </span>
         </p>
 
@@ -77,7 +86,7 @@ function LiveUpdates() {
 
           <button
             onClick={sendMessage}
-            disabled={!connected}
+            disabled={connectionStatus !== "Connected"}
             className="px-4 py-2 rounded bg-[#6B4226] text-white disabled:opacity-50"
           >
             Send

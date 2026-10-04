@@ -149,6 +149,7 @@ const wss = new WebSocketServer({
 wss.on("connection", (socket) => {
   console.log("WebSocket client connected")
 
+  // Send welcome message to newly connected client
   socket.send(
     JSON.stringify({
       type: "welcome",
@@ -156,13 +157,23 @@ wss.on("connection", (socket) => {
     })
   )
 
+  // ===============================
+  // RECEIVE MESSAGE
+  // ===============================
+
   socket.on("message", (data) => {
     const message = data.toString()
 
     console.log("Received:", message)
+    console.log("Connected clients:", wss.clients.size)
+
+    // ===============================
+    // BROADCAST MESSAGE
+    // ===============================
 
     wss.clients.forEach((client) => {
       if (client.readyState === 1) {
+
         client.send(
           JSON.stringify({
             type: "live-update",
@@ -172,6 +183,10 @@ wss.on("connection", (socket) => {
       }
     })
   })
+
+  // ===============================
+  // CLIENT DISCONNECTED
+  // ===============================
 
   socket.on("close", () => {
     console.log("WebSocket client disconnected")
